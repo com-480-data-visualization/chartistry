@@ -2,9 +2,10 @@
 
 | Student's name | SCIPER |
 | -------------- | ------ |
-| | |
-| | |
-| | |
+| Nastaran Hashemisanjani | 388010 |
+| Oscar Goudet | 314512 |
+| Garik Sahakyan | 314372 |
+| Bich Ngoc Doan | 395722 |
 
 [Milestone 1](#milestone-1) • [Milestone 2](#milestone-2) • [Milestone 3](#milestone-3)
 
