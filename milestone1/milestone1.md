@@ -31,7 +31,7 @@ Below is a simple exploratory data analysis. For more details, see the `mileston
 
 #### Distribution of Views (Log Scale)
 
-![Log Distribution of Views](milestone1/images/views_log.png)
+![Log Distribution of Views](images/views_log.png)
 
 Views are highly skewed, with a few videos receiving extremely high values. The log transformation makes the distribution more symmetric, confirming a heavy-tailed behavior.
 
@@ -39,7 +39,7 @@ Views are highly skewed, with a few videos receiving extremely high values. The 
 
 #### Distribution of Views by Country (Log Scale)
 
-![Log Views by Country](milestone1/images/views_log_country.png)
+![Log Views by Country](images/views_log_country.png)
 
 The skewness is consistent across countries, with slight differences in spread, reflecting variations in content popularity.
 
@@ -47,7 +47,7 @@ The skewness is consistent across countries, with slight differences in spread, 
 
 #### Relationship Between Views and Likes
 
-![Likes vs Views](milestone1/images/likes_views.png)
+![Likes vs Views](images/likes_views.png)
 
 There is a strong positive relationship between views and likes, showing that more viewed videos generate more engagement.
 
@@ -55,7 +55,7 @@ There is a strong positive relationship between views and likes, showing that mo
 
 #### Correlation Between Engagement Metrics
 
-![Correlation Matrix](milestone1/images/correlation.png)
+![Correlation Matrix](images/correlation.png)
 
 Views, likes, and comment count are strongly correlated, indicating that popular videos generate high interaction across metrics.
 
@@ -63,7 +63,7 @@ Views, likes, and comment count are strongly correlated, indicating that popular
 
 #### Publication Day
 
-![Videos by Day](milestone1/images/week_day.png)
+![Videos by Day](images/week_day.png)
 
 Videos are more frequently published on weekdays, with a peak around Thursday and Friday.
 
@@ -71,11 +71,9 @@ Videos are more frequently published on weekdays, with a peak around Thursday an
 
 #### Publication Hour
 
-![Publish Hour Distribution](milestone1/images/hour_day.png)
+![Publish Hour Distribution](images/hour_day.png)
 
 Most videos are published in the afternoon and early evening, especially between 14:00 and 18:00.
-
----
 
 #### Days to Trending
 
