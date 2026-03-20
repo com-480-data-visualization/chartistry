@@ -15,6 +15,22 @@ Please, fill the following sections about your project.
 
 ### Problematic
 
+This project focuses on the visualization of YouTube trending videos in order to reveal how virality manifests across different contexts. Our goal is to make visible the patterns and differences in how content reaches the trending page.
+
+Through interactive data visualization, we aim to show how virality varies along four main dimensions:
+- **Content** (category, tags, title)
+- **Engagement** (views, likes, comments)
+- **Geography** (differences between countries)
+- **Time** (evolution between 2006 and 2018)
+
+By combining these perspectives, the project will allow users to explore how trending content differs across countries and how these dynamics have evolved over time.
+
+The visualizations are designed to encourage exploration and comparison. Users will be able to identify trends such as differences in content preferences between countries or shifts in engagement over the years, helping them intuitively understand how online attention is distributed across regions, categories, and time periods.
+
+The motivation behind this project lies in the growing influence of platforms like YouTube in shaping cultural and informational landscapes. Making these patterns visible provides a clearer understanding of how digital content circulates globally.
+
+The target audience ranges from general users curious about online trends to content creators and data enthusiasts interested in understanding how virality differs across contexts.
+
 
 
 ### Exploratory Data Analysis
