@@ -25,7 +25,7 @@ Through interactive data visualization, we aim to show how virality varies along
 
 By combining these perspectives, the project will allow users to explore how trending content differs across countries and how these dynamics have evolved over time.
 
-The visualizations are designed to encourage exploration and comparison. Users will be able to identify trends such as differences in content preferences between countries or shifts in engagement over the years, helping them intuitively understand how online attention is distributed across regions, categories, and time periods.
+The visualizations will be designed to encourage exploration and comparison. Users will be able to identify trends such as differences in content preferences between countries or shifts in engagement over the years, helping them intuitively understand how online attention is distributed across regions, categories, and time periods.
 
 The motivation behind this project lies in the growing influence of platforms like YouTube in shaping cultural and informational landscapes. Making these patterns visible provides a clearer understanding of how digital content circulates globally.
 
