@@ -26,7 +26,9 @@ cd chartistry
 
 2. Start a local server:
 
+```
 python -m http.server 8000
+```
 
 3. Open in browser:
 
