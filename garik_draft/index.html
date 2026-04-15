@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Queries</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+
+    <style>
+        body {
+            font-family: Arial;
+            padding: 20px;
+        }
+
+        .controls {
+            margin-bottom: 20px;
+        }
+
+        .video {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        img {
+            width: 120px;
+            margin-right: 10px;
+        }
+
+        .stats {
+            margin-top: 20px;
+            padding: 10px;
+            background: #f3f3f3;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Test Video Queries</h1>
+
+<div class="controls">
+    <label>Country:</label>
+    <select id="countrySelect">
+        <option value="FR">FR</option>
+        <option value="US">US</option>
+        <option value="GB">GB</option>
+        <option value="DE">DE</option>
+        <option value="IN">IN</option>
+        <option value="JP">JP</option>
+        <option value="KR">KR</option>
+        <option value="MX">MX</option>
+        <option value="RU">RU</option>
+    </select>
+
+    <label>Category:</label>
+    <select id="categorySelect">
+        <option value="">All</option>
+    </select>
+
+    <button onclick="runQuery()">Search</button>
+</div>
+
+<h2>Results</h2>
+<div id="results"></div>
+
+<h2>Aggregations</h2>
+<div id="stats" class="stats"></div>
+
+<script src="queries.js"></script>
+
+</body>
+</html>
