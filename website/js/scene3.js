@@ -131,12 +131,15 @@ function drawHooks(hooks) {
   const list = document.getElementById('hook-list');
   const card = document.getElementById('hooks-card');
   list.innerHTML = '';
+  card.style.display = '';
 
   if (!hooks.length) {
-    card.style.display = 'none';
+    list.innerHTML =
+      '<p class="hook-empty">No hook-style examples in this data export. ' +
+      'They fill in after you run <code>milestone2/analysis/precompute.ipynb</code> with ' +
+      '<code>milestone2/code/text_analysis/data/hook_labels_closed.json</code> present (from the text-analysis labelling step).</p>';
     return;
   }
-  card.style.display = '';
 
   list.innerHTML = '<div class="hook-list">' +
     hooks.map(h => {

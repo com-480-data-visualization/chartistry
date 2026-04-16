@@ -17,6 +17,7 @@ const NAME_TO_CODE = {
 let _s1data = null;
 let _topo = null;
 let _metric = 'avg_views';
+let _pubHour = 0;
 let _onCountryClick = null;
 
 async function initScene1(data, onCountryClick) {
@@ -25,6 +26,16 @@ async function initScene1(data, onCountryClick) {
 
   _topo = await d3.json('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json');
   setupMetricToggle();
+
+  const pubSlider = document.getElementById('pub-hour-slider');
+  const pubVal = document.getElementById('pub-hour-val');
+  if (pubSlider && pubVal) {
+    pubSlider.addEventListener('input', () => {
+      _pubHour = +pubSlider.value;
+      pubVal.textContent = String(_pubHour);
+      if (_metric === 'publish_time') repaintMapFills(true);
+    });
+  }
 
   function runDraw() {
     try { drawMap(); } catch (e) { console.error('drawMap error:', e); }
@@ -91,13 +102,7 @@ function drawMap() {
       const code = NAME_TO_CODE[d.properties?.name];
       const info = code && byCountry[code];
       if (!info) return;
-      showTooltip(`
-        <div class="tt-flag">${flags[code] || ''}</div>
-        <div class="tt-name">${info.name}</div>
-        <div class="tt-row"><span>Avg Views</span><span class="tt-val">${fmtViews(info.avg_views)}</span></div>
-        <div class="tt-row"><span>Videos</span><span class="tt-val">${info.total_videos.toLocaleString()}</span></div>
-        <div class="tt-row"><span>Top Category</span><span class="tt-val">${info.top_category}</span></div>
-      `, event);
+      showTooltip(mapCountryTooltip(code, flags), event);
     })
     .on('mousemove', moveTooltip)
     .on('mouseleave', hideTooltip)
@@ -111,12 +116,52 @@ function drawMap() {
     <span>Low</span><div class="leg-grad"></div><span>High</span>
     <span style="margin-left:auto;color:#555">${metricLabel()}</span>
   `;
+  syncMapMetricDefinition();
+  const pubPanel = document.getElementById('pub-hour-panel');
+  if (pubPanel) pubPanel.hidden = _metric !== 'publish_time';
+}
+
+function publishHourZmax() {
+  const z = _s1data.global?.publish_hour_zmax;
+  return typeof z === 'number' && z > 0 ? z : 10;
+}
+
+function pubHourShare(code, h) {
+  const root = _s1data.global?.publish_hour_share;
+  if (!root) return 0;
+  const row = root[String(h)];
+  return row && typeof row[code] === 'number' ? row[code] : 0;
+}
+
+function mapCountryTooltip(code, flags) {
+  const info = _s1data.global.by_country[code];
+  if (!info) return '';
+  let metricRows = '';
+  if (_metric === 'publish_time') {
+    const sh = pubHourShare(code, _pubHour);
+    metricRows = `
+        <div class="tt-row"><span>UTC hour</span><span class="tt-val">${_pubHour}:00</span></div>
+        <div class="tt-row"><span>Share of publishes</span><span class="tt-val">${sh.toFixed(2)}%</span></div>`;
+  } else if (_metric === 'avg_views') {
+    metricRows = `<div class="tt-row"><span>Avg Views</span><span class="tt-val">${fmtViews(info.avg_views)}</span></div>`;
+  } else if (_metric === 'video_count') {
+    metricRows = `<div class="tt-row"><span>Videos</span><span class="tt-val">${info.total_videos.toLocaleString()}</span></div>`;
+  } else {
+    metricRows = `<div class="tt-row"><span>Engagement (avg)</span><span class="tt-val">${metricVal(code).toFixed(4)}</span></div>`;
+  }
+  return `
+        <div class="tt-flag">${flags[code] || ''}</div>
+        <div class="tt-name">${info.name}</div>
+        ${metricRows}
+        <div class="tt-row"><span>Top category</span><span class="tt-val">${info.top_category}</span></div>
+      `;
 }
 
 function metricVal(code) {
   const d = _s1data.global.by_country[code];
   if (_metric === 'avg_views') return d?.avg_views || 0;
   if (_metric === 'video_count') return d?.total_videos || 0;
+  if (_metric === 'publish_time') return pubHourShare(code, _pubHour);
   // engagement: mean across categories
   const em = _s1data.global.engage_heatmap[code] || {};
   const vals = Object.values(em);
@@ -124,7 +169,61 @@ function metricVal(code) {
 }
 
 function metricLabel() {
-  return { avg_views: 'Avg Views', video_count: 'Video Count', engagement: 'Engagement Rate' }[_metric];
+  return {
+    avg_views: 'Avg Views',
+    video_count: 'Video Count',
+    engagement: 'Engagement Rate',
+    publish_time: 'Publication share',
+  }[_metric];
+}
+
+/** Shown under the map legend so the engagement definition is explicit. */
+function metricDefinitionText() {
+  if (_metric === 'engagement') {
+    return (
+      'Engagement rate = (likes + comments) ÷ views on each video; dislikes are not included. '
+      + 'Map color for a country is the average of that rate across content categories (each category weighted equally).'
+    );
+  }
+  if (_metric === 'publish_time') {
+    return (
+      'Publication time uses each video’s publish timestamp in UTC. For the selected hour, the map shows '
+      + 'that country’s share of its own trending rows published in that hour (within-country %; all hours sum to 100%). '
+      + 'Use the slider to see how the pattern shifts through the day.'
+    );
+  }
+  if (_metric === 'avg_views') {
+    return 'Average views among all trending videos from that country in the dataset.';
+  }
+  return 'Total count of trending video rows from that country in the dataset.';
+}
+
+function syncMapMetricDefinition() {
+  const el = document.getElementById('map-metric-def');
+  if (!el) return;
+  el.textContent = metricDefinitionText();
+}
+
+function repaintMapFills(animate) {
+  const apply = () => {
+    let cs;
+    if (_metric === 'publish_time') {
+      cs = d3.scaleSequential().domain([0, publishHourZmax()])
+        .interpolator(t => d3.interpolateRgb('#1c1c1c', '#ff4444')(t));
+    } else {
+      const vals = _s1data.countries.map(c => metricVal(c)).filter(Boolean);
+      cs = d3.scaleSequential().domain([0, d3.max(vals) || 1])
+        .interpolator(t => d3.interpolateRgb('#1c1c1c', '#ff4444')(t));
+    }
+    const sel = d3.selectAll('.has-data');
+    const fillFn = (d) => {
+      const code = NAME_TO_CODE[d.properties?.name];
+      return code ? cs(metricVal(code)) : '#1c1c1c';
+    };
+    if (animate) sel.transition().duration(500).attr('fill', fillFn);
+    else sel.attr('fill', fillFn);
+  };
+  apply();
 }
 
 function setupMetricToggle() {
@@ -133,16 +232,17 @@ function setupMetricToggle() {
       document.querySelectorAll('.tog').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       _metric = btn.dataset.metric;
-      // Re-color
-      const vals = _s1data.countries.map(c => metricVal(c)).filter(Boolean);
-      const cs = d3.scaleSequential().domain([0, d3.max(vals)])
-        .interpolator(t => d3.interpolateRgb('#1c1c1c', '#ff4444')(t));
-      d3.selectAll('.has-data').transition().duration(500)
-        .attr('fill', d => {
-          const code = NAME_TO_CODE[d.properties?.name];
-          return code ? cs(metricVal(code)) : '#1c1c1c';
-        });
+      const pubPanel = document.getElementById('pub-hour-panel');
+      if (pubPanel) pubPanel.hidden = _metric !== 'publish_time';
+      if (_metric === 'publish_time') {
+        const s = document.getElementById('pub-hour-slider');
+        const v = document.getElementById('pub-hour-val');
+        if (s) _pubHour = +s.value;
+        if (v) v.textContent = String(_pubHour);
+      }
+      repaintMapFills(true);
       document.getElementById('map-legend').querySelector('span:last-child').textContent = metricLabel();
+      syncMapMetricDefinition();
     });
   });
 }

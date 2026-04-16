@@ -7,6 +7,8 @@
 | Garik Sahakyan | 314372 |
 | Bich Ngoc Doan | 395722 |
 
+**Repository layout:** **`milestone1/`** — milestone 1 submission only (`milestone1.ipynb`, `milestone1.md`, six report figures). **`data/`**, **`analysis/`**, **`website/`**, and **`code/`** sit at the repo root (shared pipeline + site, aligned with the main project branch). **`milestone2/`** holds exploratory / data-story notebooks, `exploration_images/`, and `map_ui_export.py` (see `milestone2/README.md`).
+
 [Milestone 1](#milestone-1) • [Milestone 2](#milestone-2) • [Milestone 3](#milestone-3)
 
 ## Milestone 1 (20th March, 5pm)

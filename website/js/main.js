@@ -9,7 +9,7 @@
       <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;gap:1rem;font-family:Inter,sans-serif;color:#888">
         <div style="font-size:3rem">⚠️</div>
         <h2 style="color:#f0f0f0">Couldn't load data</h2>
-        <p>Run a local server from the <code>website/</code> folder:</p>
+        <p>Run a local server from the repo-root <code>website/</code> folder:</p>
         <code style="background:#1a1a1a;padding:0.5rem 1rem;border-radius:8px;color:#ff8888">python -m http.server 8080</code>
         <p>Then open <a href="http://localhost:8080" style="color:#ff4444">http://localhost:8080</a></p>
       </div>`;
