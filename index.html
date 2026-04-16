@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chartistry — What Makes a Video Go Viral?</title>
+  <meta name="description"
+    content="Explore what makes YouTube videos trend across 10 countries — title patterns, hooks, timing, and more.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap"
+    rel="stylesheet">
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/topojson-client@3/dist/topojson-client.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/jasondavies/d3-cloud/build/d3.layout.cloud.js"></script>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+  <!-- NAV -->
+  <nav class="top-nav" id="top-nav">
+    <div class="nav-logo">📊 Chartistry</div>
+    <div class="nav-links">
+      <a href="#scene-1" class="nav-link" data-scene="1">Global</a>
+      <a href="#scene-2" class="nav-link" data-scene="2">Explore</a>
+      <a href="#scene-3" class="nav-link nav-locked" id="nav-formula" data-scene="3">The Formula</a>
+    </div>
+  </nav>
+
+  <!-- SCENE 0: HERO -->
+  <section id="scene-0" class="scene scene-hero">
+    <div class="hero-content">
+      <div class="hero-tag">A Chartistry Visualization</div>
+      <h1 class="hero-title">What Makes a Video<br><span class="text-red">Go Viral?</span></h1>
+      <p class="hero-sub">207,000 trending videos. 10 countries. 18 content categories.<br>What the data reveals about
+        virality.</p>
+      <a href="#scene-1" class="btn-primary">Start Exploring ↓</a>
+    </div>
+    <div class="hero-stats" id="hero-stats"></div>
+  </section>
+
+  <!-- SCENE 1: GLOBAL -->
+  <section id="scene-1" class="scene scene-global">
+    <div class="scene-header">
+      <h2 class="scene-title">The Global Stage</h2>
+      <p class="scene-sub">How does trending content differ across the world? Hover any country, click to explore.</p>
+    </div>
+    <div class="global-layout">
+      <div class="map-side">
+        <div class="metric-toggle" id="metric-toggle">
+          <button class="tog active" data-metric="avg_views">Avg Views</button>
+          <button class="tog" data-metric="video_count">Volume</button>
+          <button class="tog" data-metric="engagement">Engagement</button>
+          <button class="tog" data-metric="publish_time">Publication time</button>
+        </div>
+        <div id="world-map"></div>
+        <div id="map-legend" class="map-legend"></div>
+        <p id="map-metric-def" class="map-metric-def" aria-live="polite"></p>
+        <div id="pub-hour-panel" class="pub-hour-panel" hidden>
+          <label class="pub-hour-label" for="pub-hour-slider">Hour of publication (UTC):
+            <span id="pub-hour-val">0</span>:00</label>
+          <input type="range" id="pub-hour-slider" min="0" max="23" value="0" step="1" />
+        </div>
+      </div>
+      <div class="heatmap-side">
+        <div class="card-header">
+          <h3>Content Mix by Country</h3>
+          <span class="card-hint">% of trending videos in each category</span>
+        </div>
+        <div id="cat-heatmap"></div>
+      </div>
+    </div>
+    <div class="scene-cta">
+      <span class="scene-cta-text">Ready to zoom into a specific niche?</span>
+      <a href="#scene-2" class="btn-primary btn-sm">Choose Your Lens →</a>
+    </div>
+  </section>
+
+  <!-- SCENE 2: SELECTOR -->
+  <section id="scene-2" class="scene scene-selector">
+    <div class="scene-header">
+      <h2 class="scene-title">Choose Your Lens</h2>
+      <p class="scene-sub">Pick a country and a content category to decode the formula for virality in that niche.</p>
+    </div>
+    <div class="selector-layout">
+      <div class="sel-block">
+        <div class="sel-label">Country</div>
+        <div id="country-grid" class="country-grid"></div>
+      </div>
+      <div class="sel-divider">×</div>
+      <div class="sel-block">
+        <div class="sel-label">Category</div>
+        <div id="category-grid" class="category-grid"></div>
+      </div>
+    </div>
+    <div class="selector-footer">
+      <div id="selection-preview" class="selection-preview">Select a country and category above</div>
+      <button class="btn-primary" id="explore-btn" disabled>Reveal the Formula →</button>
+    </div>
+  </section>
+
+  <!-- SCENE 3: FORMULA -->
+  <section id="scene-3" class="scene scene-formula">
+    <div class="formula-header">
+      <div>
+        <div class="formula-tag">The Formula</div>
+        <h2 class="formula-title" id="formula-title">—</h2>
+      </div>
+      <button class="btn-ghost" id="back-btn">← Change Niche</button>
+    </div>
+
+    <!-- Stat ribbon -->
+    <div class="stat-ribbon">
+      <div class="ribbon-stat">
+        <div class="rval" id="s-videos">—</div>
+        <div class="rlabel">Trending Videos</div>
+      </div>
+      <div class="ribbon-stat">
+        <div class="rval" id="s-views">—</div>
+        <div class="rlabel">Avg Views</div>
+      </div>
+      <div class="ribbon-stat">
+        <div class="rval" id="s-emoji">—</div>
+        <div class="rlabel">Emojis / Title</div>
+      </div>
+      <div class="ribbon-stat">
+        <div class="rval" id="s-caps">—</div>
+        <div class="rlabel">Caps Ratio</div>
+      </div>
+      <div class="ribbon-stat">
+        <div class="rval" id="s-timing">—</div>
+        <div class="rlabel">Best Time to Post</div>
+      </div>
+    </div>
+
+    <!-- Main grid -->
+    <div class="formula-grid">
+      <div class="fcard fcard-cloud">
+        <div class="card-header">
+          <h3>Title Language</h3><span class="card-hint">Most frequent words in trending titles</span>
+        </div>
+        <div id="word-cloud"></div>
+      </div>
+      <div class="fcard fcard-emoji">
+        <div class="card-header">
+          <h3>Favorite Emojis 🔥</h3>
+        </div>
+        <div id="emoji-chart"></div>
+      </div>
+      <div class="fcard fcard-videos">
+        <div class="card-header">
+          <h3>Sample trending videos</h3><span class="card-hint">Random pick from this country × category</span>
+        </div>
+        <div id="video-grid" class="video-grid"></div>
+      </div>
+      <div class="fcard fcard-hooks" id="hooks-card">
+        <div class="card-header">
+          <h3>Hook styles</h3><span class="card-hint">Random labelled examples for this country × category</span>
+        </div>
+        <div id="hook-list"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Tooltip (shared) -->
+  <div class="tooltip" id="tooltip"></div>
+
+  <script src="js/utils.js"></script>
+  <script src="js/scene1.js"></script>
+  <script src="js/scene2.js"></script>
+  <script src="js/scene3.js"></script>
+  <script src="js/main.js"></script>
+</body>
+
+</html>
