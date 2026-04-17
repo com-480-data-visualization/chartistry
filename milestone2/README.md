@@ -1,6 +1,11 @@
+## Milestone 2 — Report
+The final report for Milestone 2 can be accessed here:
+- 📄 [Report.pdf](./Report.pdf)
+  
 # Milestone 2 — exploratory workspace
 
 This folder holds **milestone 2 exploration**: long-form analysis notebooks, exported figures, and standalone HTML prototypes. It is separate from the **milestone 1** submission (`milestone1/`) and from the **shared site + pipeline** at the repo root (`website/`, `analysis/`, `data/`, `code/`).
+
 
 | What | Where |
 |------|--------|
