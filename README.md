@@ -144,9 +144,9 @@ We take inspiration from several visual essay-style websites such as ["The Puddi
 
 For this milestone we deepened the **exploratory analysis** around YouTube trending: country- and category-centric notebooks (`country_analysis.ipynb`, `category_analysis.ipynb`), interactive Plotly exports (`datastory_interactive.ipynb`), and map prototypes (`datastory_map.ipynb`, `map_ui_export.py`). Outputs live under **`milestone2/exploration_images/`** (PNGs and standalone HTML). That work informed the **live site** (`website/`) and the shared **`analysis/precompute.ipynb`** pipeline that builds **`website/public/data.json`**.
 
-**Report (PDF):** [Report.pdf](Report.pdf)
+**Report (PDF):** [Report-Milestone-2.pdf](Report-Milestone-2.pdf)
 
-*Opening the file:* Code editors (and sometimes GitHub’s preview) show a PDF as unreadable binary text. **Download** the file from GitHub or open **`Report.pdf`** from disk with **Preview** (macOS), **Adobe Reader**, or your browser (**File → Open**).
+*Opening the file:* Code editors (and sometimes GitHub’s preview) show a PDF as unreadable binary text. **Download** the file from GitHub or open **`Report-Milestone-2.pdf`** from disk with **Preview** (macOS), **Adobe Reader**, or your browser (**File → Open**).
 
 **Live visualization:** [com-480-data-visualization.github.io/chartistry](https://com-480-data-visualization.github.io/chartistry/)
 
