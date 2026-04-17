@@ -1,7 +1,5 @@
 # Project of Data Visualization (COM-480)
 
-**Live visualization:** [com-480-data-visualization.github.io/chartistry](https://com-480-data-visualization.github.io/chartistry/)
-
 | Student's name | SCIPER |
 | -------------- | ------ |
 | Nastaran Hashemisanjani | 388010 |
@@ -13,11 +11,17 @@
 
 - **`data/`** — Raw and processed inputs for the pipeline (e.g. merged trending tables used by analysis).
 - **`analysis/`** — Project-wide precompute. Run **`analysis/precompute.ipynb`** to build **`website/public/data.json`**, which powers the interactive site (aggregates, heatmaps, hook examples when labels exist, etc.).
-- **`website/`** — Static front-end (`index.html`, `css/`, `js/`, `public/`). Serve locally from this folder (e.g. `python -m http.server 8080`) to preview the visualization.
+- **`website/`** — Static front-end (`index.html`, `css/`, `js/`, `public/`).
 - **`code/`** — Supporting code (e.g. **`code/text_analysis/`** for hook labelling and related assets under `code/text_analysis/data/`).
 - **`milestone1/`** — Milestone 1 deliverables: **`milestone1.ipynb`**, **`milestone1.md`**, and report figures under **`milestone1/images/`**.
-- **`milestone2/`** — Exploratory and data-story notebooks, **`exploration_images/`**, and helpers such as **`map_ui_export.py`** (see **`milestone2/README.md`**).
+- **`milestone2/`** — Milestone 2 exploration: analysis notebooks, **`exploration_images/`** (exported PNG/HTML), and **`map_ui_export.py`**.
 - **`scripts/`** — Automation (e.g. **`scripts/deploy-gh-pages.sh`** copies **`website/`** to the **`gh-pages`** branch root for GitHub Pages).
+
+### Site preview
+
+**Published:** [com-480-data-visualization.github.io/chartistry](https://com-480-data-visualization.github.io/chartistry/)
+
+**Local (same files as production):** from the repo root, `cd website` then `python3 -m http.server 8080` and open the URL shown in the terminal.
 
 [Milestone 1](#milestone-1) • [Milestone 2](#milestone-2) • [Milestone 3](#milestone-3)
 
@@ -138,6 +142,13 @@ We take inspiration from several visual essay-style websites such as ["The Puddi
 
 **10% of the final grade**
 
+For this milestone we deepened the **exploratory analysis** around YouTube trending: country- and category-centric notebooks (`country_analysis.ipynb`, `category_analysis.ipynb`), interactive Plotly exports (`datastory_interactive.ipynb`), and map prototypes (`datastory_map.ipynb`, `map_ui_export.py`). Outputs live under **`milestone2/exploration_images/`** (PNGs and standalone HTML). That work informed the **live site** (`website/`) and the shared **`analysis/precompute.ipynb`** pipeline that builds **`website/public/data.json`**.
+
+**Report (PDF):** [Report.pdf](Report.pdf)
+
+*Opening the file:* Code editors (and sometimes GitHub’s preview) show a PDF as unreadable binary text. **Download** the file from GitHub or open **`Report.pdf`** from disk with **Preview** (macOS), **Adobe Reader**, or your browser (**File → Open**).
+
+**Live visualization:** [com-480-data-visualization.github.io/chartistry](https://com-480-data-visualization.github.io/chartistry/)
 
 ## Milestone 3 (29th May, 5pm)
 
