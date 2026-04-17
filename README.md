@@ -25,6 +25,8 @@
 
 [Milestone 1](#milestone-1) • [Milestone 2](#milestone-2) • [Milestone 3](#milestone-3)
 
+<a id="milestone-1"></a>
+
 ## Milestone 1 (20th March, 5pm)
 
 **10% of the final grade**
@@ -137,6 +139,7 @@ These features are planned as part of the final deliverable and represent the co
 #### What source of inspiration do we take?
 We take inspiration from several visual essay-style websites such as ["The Pudding"](https://pudding.cool/) or [“Information is Beautiful”](https://informationisbeautiful.net/), which blends rigorous data processing with playful, interactive exploration.
 
+<a id="milestone-2"></a>
 
 ## Milestone 2 (17th April, 5pm)
 
@@ -149,6 +152,8 @@ For this milestone we deepened the **exploratory analysis** around YouTube trend
 *Opening the file:* Code editors (and sometimes GitHub’s preview) show a PDF as unreadable binary text. **Download** the file from GitHub or open **`Report-Milestone-2.pdf`** from disk with **Preview** (macOS), **Adobe Reader**, or your browser (**File → Open**).
 
 **Live visualization:** [com-480-data-visualization.github.io/chartistry](https://com-480-data-visualization.github.io/chartistry/)
+
+<a id="milestone-3"></a>
 
 ## Milestone 3 (29th May, 5pm)
 
