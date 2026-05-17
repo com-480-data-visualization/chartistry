@@ -27,8 +27,28 @@ function renderFormula(data, country, category) {
 
   drawWordCloud(combo.top_words || []);
   drawEmojiChart(combo.top_emojis || []);
-  drawVideos(combo.top_videos || []);
-  drawHooks(combo.hook_examples || []);
+  
+  // Video Shuffle Logic
+  const allVideos = combo.top_videos || [];
+  const shuffleBtn = document.getElementById('shuffle-videos-btn');
+  const doDraw = () => {
+    // Show 10 videos to scroll through for a rich, explorative user experience
+    const shuffled = [...allVideos].sort(() => Math.random() - 0.5).slice(0, 10);
+    drawVideos(shuffled);
+  };
+  if (shuffleBtn) {
+    shuffleBtn.onclick = () => {
+      const grid = document.getElementById('video-grid');
+      grid.style.opacity = 0;
+      setTimeout(() => {
+        doDraw();
+        grid.style.opacity = 1;
+      }, 200);
+    };
+  }
+  doDraw();
+
+  drawHookDistribution(combo.hook_distribution || {}, combo.hook_examples || []);
 }
 
 /* ── Word cloud ── */
@@ -107,52 +127,151 @@ function drawEmojiChart(emojis) {
 function drawVideos(videos) {
   const grid = document.getElementById('video-grid');
   grid.innerHTML = '';
+  grid.style.transition = 'opacity 0.3s ease';
   if (!videos.length) { grid.innerHTML = '<p style="color:#555;font-style:italic">No video data</p>'; return; }
 
   videos.forEach(v => {
     const thumbUrl = `https://i.ytimg.com/vi/${v.video_id}/mqdefault.jpg`;
     const card = document.createElement('div');
     card.className = 'vcard';
+    card.style.cursor = 'pointer';
+    card.setAttribute('title', 'Click to watch on YouTube');
+    
     card.innerHTML = `
-      <img class="vcard-thumb" src="${thumbUrl}" alt="${escHtml(v.title)}"
-           onerror="this.outerHTML='<div class=\\'vcard-thumb-err\\'>🎬</div>'"
-           loading="lazy">
+      <div class="vcard-thumb-container" style="position:relative; overflow:hidden;">
+        <img class="vcard-thumb" src="${thumbUrl}" alt="${escHtml(v.title)}"
+             onerror="this.outerHTML='<div class=\\'vcard-thumb-err\\'>🎬</div>'"
+             loading="lazy">
+        <div class="vcard-play-overlay">
+          <span>▶ Watch</span>
+        </div>
+      </div>
       <div class="vcard-info">
         <div class="vcard-title">${escHtml(v.title)}</div>
         <div class="vcard-views">${fmtViews(v.views)} views</div>
       </div>
     `;
+
+    card.addEventListener('click', () => {
+      window.open(`https://youtube.com/watch?v=${v.video_id}`, '_blank');
+    });
+
     grid.appendChild(card);
   });
 }
 
-/* ── Hook examples ── */
-function drawHooks(hooks) {
-  const list = document.getElementById('hook-list');
-  const card = document.getElementById('hooks-card');
-  list.innerHTML = '';
-  card.style.display = '';
+/* ── Hook distribution chart ── */
+function drawHookDistribution(dist, examples) {
+  const el = document.getElementById('hook-distribution');
+  el.innerHTML = '';
+  
+  // Filter out 0% and sort
+  const entries = Object.entries(dist)
+    .filter(([_, pct]) => pct > 0)
+    .sort((a,b) => b[1] - a[1]);
 
-  if (!hooks.length) {
-    list.innerHTML =
-      '<p class="hook-empty">No hook-style examples in this data export. ' +
-      'They fill in after you run <code>analysis/precompute.ipynb</code> with ' +
-      '<code>code/text_analysis/data/hook_labels_closed.json</code> present (from the text-analysis labelling step).</p>';
+  if (!entries.length) {
+    el.innerHTML = '<p class="hook-empty">No distribution data available yet.</p>';
     return;
   }
 
-  list.innerHTML = '<div class="hook-list">' +
-    hooks.map(h => {
-      const col = hookColor(h.hook);
-      return `
-        <div class="hook-item">
-          <span class="hook-badge" style="background:${col.bg};color:${col.color}">${escHtml(h.hook)}</span>
-          <div class="hook-body">
-            <div class="hook-title">${escHtml(h.title)}</div>
-            ${h.views ? `<div class="hook-views">${fmtViews(h.views)} views</div>` : ''}
+  // Draw rows
+  entries.forEach(([name, pct]) => {
+    const col = hookColor(name);
+    const displayPct = (pct * 100).toFixed(0) + '%';
+    
+    const row = document.createElement('div');
+    row.className = 'hook-dist-row';
+    row.dataset.hook = name;
+    
+    row.innerHTML = `
+      <div class="hook-dist-main">
+        <span class="hook-dist-label" title="${name}">${name}</span>
+        <div class="hook-dist-bar-wrap">
+          <div class="hook-dist-bar" style="width:0%; background:${col.color}" data-w="${pct*100}%"></div>
+        </div>
+        <span class="hook-dist-val">${displayPct}</span>
+      </div>
+      <div class="hook-dropdown-container"></div>
+    `;
+
+    // Click handler for interactive drilldown
+    row.addEventListener('click', (e) => {
+      // If user clicked directly on an example link inside, don't toggle
+      if (e.target.closest('.hook-ex-item')) return;
+
+      const dropdownContainer = row.querySelector('.hook-dropdown-container');
+      const isActive = row.classList.contains('active');
+
+      // Collapse all other active rows first
+      el.querySelectorAll('.hook-dist-row.active').forEach(r => {
+        if (r !== row) {
+          r.classList.remove('active');
+          r.querySelector('.hook-dropdown-container').innerHTML = '';
+        }
+      });
+
+      if (isActive) {
+        row.classList.remove('active');
+        dropdownContainer.innerHTML = '';
+      } else {
+        row.classList.add('active');
+        
+        // Find all examples for this specific hook
+        const hookEx = examples.filter(ex => ex.hook === name);
+        if (!hookEx.length) {
+          dropdownContainer.innerHTML = `
+            <div class="hook-dist-ex-header">
+              <span>Video examples</span>
+              <span>0 found</span>
+            </div>
+            <div class="hook-examples-dropdown">
+              <div style="font-size:0.7rem; color:var(--muted); padding:0.4rem 0.6rem; font-style:italic">
+                No classification samples found in the top 100 for this combination.
+              </div>
+            </div>
+          `;
+          return;
+        }
+
+        // Render scrollable dropdown
+        const itemsHtml = hookEx.map(ex => `
+          <a class="hook-ex-item" href="https://youtube.com/watch?v=${ex.video_id}" target="_blank" title="Watch on YouTube">
+            <span class="hook-ex-title">“${escHtml(ex.title)}”</span>
+            <span class="hook-ex-views">
+              <span>👁️</span>
+              <span>${fmtViews(ex.views)}</span>
+            </span>
+          </a>
+        `).join('');
+
+        dropdownContainer.innerHTML = `
+          <div class="hook-dist-ex-header">
+            <span>Video examples (Click to watch)</span>
+            <span>${hookEx.length} videos</span>
           </div>
-        </div>`;
-    }).join('') + '</div>';
+          <div class="hook-examples-dropdown">
+            ${itemsHtml}
+          </div>
+        `;
+      }
+    });
+
+    el.appendChild(row);
+  });
+
+  // Animate bars
+  requestAnimationFrame(() => {
+    el.querySelectorAll('.hook-dist-bar').forEach(bar => {
+      bar.style.width = bar.dataset.w;
+    });
+  });
+}
+
+
+/* ── Hook list (legacy / hidden) ── */
+function drawHooks() {
+  // Integrated into distribution now
 }
 
 function escHtml(s) {

@@ -387,7 +387,7 @@ body {
   width: 100px;
   height: 7px;
   border-radius: 4px;
-  background: linear-gradient(to right, #1c1c1c, var(--red));
+  background: linear-gradient(to right, #3b2f2f, #ff8c00, #ff4444);
 }
 
 /* Heatmap */
@@ -730,25 +730,102 @@ body {
   gap: 0.85rem;
 }
 
+.video-grid.reel-mode {
+  display: flex !important;
+  overflow-x: auto;
+  gap: 1.25rem;
+  padding: 0.5rem 0.2rem 1.5rem;
+  scrollbar-width: thin;
+  scrollbar-color: var(--red-dim) transparent;
+}
+
+.video-grid.reel-mode::-webkit-scrollbar { height: 5px; }
+.video-grid.reel-mode::-webkit-scrollbar-thumb { background: var(--red-dim); border-radius: 10px; }
+
+.video-grid.reel-mode .vcard {
+  flex: 0 0 240px;
+  background: var(--surf1);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.25s ease;
+}
+
+.video-grid.reel-mode .vcard:hover {
+  transform: translateY(-5px);
+  border-color: var(--red);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+}
+
 .vcard {
   border-radius: 10px;
   overflow: hidden;
   background: var(--surf2);
   border: 1px solid var(--border);
-  transition: transform 0.18s, border-color 0.18s;
+  transition: transform 0.25s cubic-bezier(0.25, 1, 0.5, 1), border-color 0.25s ease, box-shadow 0.25s ease;
 }
 
 .vcard:hover {
-  transform: translateY(-3px);
-  border-color: #444;
+  transform: translateY(-5px);
+  border-color: var(--red);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.5);
+}
+
+.vcard-thumb-container {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 16/9;
 }
 
 .vcard-thumb {
   width: 100%;
-  aspect-ratio: 16/9;
+  height: 100%;
   object-fit: cover;
   display: block;
   background: #111;
+  transition: transform 0.3s ease;
+}
+
+.vcard:hover .vcard-thumb {
+  transform: scale(1.05);
+}
+
+.vcard-play-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(2px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  pointer-events: none;
+}
+
+.vcard:hover .vcard-play-overlay {
+  opacity: 1;
+}
+
+.vcard-play-overlay span {
+  background: var(--red);
+  color: white;
+  padding: 0.4rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  box-shadow: 0 4px 15px rgba(255, 0, 0, 0.4);
+  transform: translateY(10px);
+  transition: transform 0.25s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.vcard:hover .vcard-play-overlay span {
+  transform: translateY(0);
 }
 
 .vcard-thumb-err {
@@ -865,6 +942,180 @@ body {
 
 .fade-in {
   animation: fadeIn 0.45s ease forwards;
+}
+
+/* Hook Distribution Chart */
+.hook-dist-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  margin: 1.5rem 0 2rem;
+}
+
+.hook-dist-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.8rem;
+  border-radius: var(--r);
+  background: var(--surf2);
+  border: 1px solid var(--border);
+  transition: transform 0.2s, border-color 0.2s, background-color 0.2s;
+  cursor: pointer;
+}
+
+.hook-dist-row:hover {
+  border-color: #777;
+  background: rgba(255, 255, 255, 0.05);
+  transform: translateX(4px);
+}
+
+.hook-dist-row.active {
+  border-color: var(--text);
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.hook-dist-main {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+}
+
+.hook-dist-label {
+  flex: 0 0 250px;
+  font-size: 0.73rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text);
+  white-space: normal;
+  line-height: 1.25;
+  padding-right: 0.5rem;
+}
+
+.hook-dist-bar-wrap {
+  flex: 1;
+  height: 8px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+}
+
+.hook-dist-bar {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.hook-dist-val {
+  min-width: 40px;
+  text-align: right;
+  font-size: 0.85rem;
+  font-weight: 800;
+  font-family: var(--fhead);
+  color: var(--text);
+}
+
+/* Interactive Dropdown Examples Styles */
+.hook-dist-ex-header {
+  margin-left: 170px;
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+  font-weight: 700;
+  border-top: 1px dashed var(--border);
+  padding-top: 0.5rem;
+  margin-top: 0.2rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.hook-examples-dropdown {
+  margin-left: 170px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding-bottom: 0.4rem;
+  animation: slideDown 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  max-height: 190px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,0.1) transparent;
+}
+
+.hook-examples-dropdown::-webkit-scrollbar {
+  width: 4px;
+}
+.hook-examples-dropdown::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.1);
+  border-radius: 2px;
+}
+
+.hook-ex-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+  font-size: 0.72rem;
+  color: var(--muted);
+  padding: 0.4rem 0.5rem;
+  border-radius: 4px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+
+.hook-ex-item:hover {
+  background: rgba(255,255,255,0.06);
+  border-color: rgba(255,255,255,0.1);
+  color: var(--text);
+}
+
+.hook-ex-title {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.hook-ex-views {
+  font-size: 0.65rem;
+  color: var(--muted);
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.hook-dist-row:hover .hook-ex-views {
+  color: #ccc;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.card-divider {
+  height: 1px;
+  background: var(--border);
+  margin: 2rem -1.5rem;
+}
+
+.card-header.mini {
+  margin-bottom: 0.8rem;
+}
+
+.card-header.mini h4 {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--dim);
 }
 
 .fade-up {

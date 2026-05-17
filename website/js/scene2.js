@@ -1,12 +1,12 @@
 // scene2.js — Country × Category selector
 
 let _s2data = null;
-let _selCountry  = null;
+let _selCountry = null;
 let _selCategory = null;
-let _onExplore   = null;
+let _onExplore = null;
 
 function initScene2(data, onExplore) {
-  _s2data   = data;
+  _s2data = data;
   _onExplore = onExplore;
   renderCountries();
   renderCategories();
@@ -25,7 +25,7 @@ function renderCountries() {
     const tile = document.createElement('div');
     tile.className = 'country-tile';
     tile.dataset.code = code;
-    tile.innerHTML = `<span class="ctile-flag">${flags[code]||''}</span><span class="ctile-name">${names[code]||code}</span>`;
+    tile.innerHTML = `<span class="ctile-flag">${flags[code] || ''}</span><span class="ctile-name">${names[code] || code}</span>`;
     tile.addEventListener('click', () => {
       document.querySelectorAll('.country-tile').forEach(t => t.classList.remove('sel'));
       tile.classList.add('sel');
@@ -57,14 +57,14 @@ function renderCategories() {
 function updatePreview() {
   const flags = _s2data.country_flags || {};
   const names = _s2data.country_names || {};
-  const prev  = document.getElementById('selection-preview');
-  const btn   = document.getElementById('explore-btn');
+  const prev = document.getElementById('selection-preview');
+  const btn = document.getElementById('explore-btn');
 
   if (_selCountry && _selCategory) {
-    prev.innerHTML = `Exploring: <strong>${flags[_selCountry]||''} ${names[_selCountry]||_selCountry}</strong> &times; <strong>${catIcon(_selCategory)} ${_selCategory}</strong>`;
+    prev.innerHTML = `Exploring: <strong>${flags[_selCountry] || ''} ${names[_selCountry] || _selCountry}</strong> &times; <strong>${catIcon(_selCategory)} ${_selCategory}</strong>`;
     btn.disabled = false;
   } else if (_selCountry) {
-    prev.innerHTML = `${flags[_selCountry]||''} <strong>${names[_selCountry]||_selCountry}</strong> selected — now pick a category`;
+    prev.innerHTML = `${flags[_selCountry] || ''} <strong>${names[_selCountry] || _selCountry}</strong> selected — now pick a category`;
     btn.disabled = true;
   } else if (_selCategory) {
     prev.innerHTML = `<strong>${catIcon(_selCategory)} ${_selCategory}</strong> selected — now pick a country`;
@@ -77,7 +77,7 @@ function updatePreview() {
 
 // Allow pre-selecting from Scene 1 map click
 function preSelectCountry(code, cat) {
-  _selCountry  = code;
+  _selCountry = code;
   _selCategory = cat || null;
   document.querySelectorAll('.country-tile').forEach(t =>
     t.classList.toggle('sel', t.dataset.code === code));

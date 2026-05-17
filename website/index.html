@@ -150,16 +150,22 @@
         <div id="emoji-chart"></div>
       </div>
       <div class="fcard fcard-videos">
-        <div class="card-header">
-          <h3>Sample trending videos</h3><span class="card-hint">Random pick from this country × category</span>
+        <div class="card-header" style="display:flex; justify-content:space-between; align-items:flex-start;">
+          <div>
+            <h3>Spotlight on Trending</h3>
+            <span class="card-hint">Handpicked glimpses of what’s trending in this region.</span>
+          </div>
+          <button id="shuffle-videos-btn" class="btn-ghost btn-sm" title="Shuffle samples">
+            <span>🎲</span> Shuffle
+          </button>
         </div>
-        <div id="video-grid" class="video-grid"></div>
+        <div id="video-grid" class="video-grid reel-mode" style="display:flex; overflow-x:auto; gap:1.2rem; padding-bottom:1rem; scroll-behavior:smooth;"></div>
       </div>
       <div class="fcard fcard-hooks" id="hooks-card">
         <div class="card-header">
-          <h3>Hook styles</h3><span class="card-hint">Random labelled examples for this country × category</span>
+          <h3>The Winning Hook</h3><span class="card-hint">Which rhetorical strategies define virality in this niche?</span>
         </div>
-        <div id="hook-list"></div>
+        <div id="hook-distribution" class="hook-dist-container"></div>
       </div>
     </div>
   </section>
@@ -167,11 +173,11 @@
   <!-- Tooltip (shared) -->
   <div class="tooltip" id="tooltip"></div>
 
-  <script src="js/utils.js"></script>
-  <script src="js/scene1.js"></script>
-  <script src="js/scene2.js"></script>
-  <script src="js/scene3.js"></script>
-  <script src="js/main.js"></script>
+  <script src="js/utils.js?v=3"></script>
+  <script src="js/scene1.js?v=3"></script>
+  <script src="js/scene2.js?v=3"></script>
+  <script src="js/scene3.js?v=3"></script>
+  <script src="js/main.js?v=3"></script>
 </body>
 
 </html>

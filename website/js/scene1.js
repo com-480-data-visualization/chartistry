@@ -76,11 +76,10 @@ function drawMap() {
 
   const byCountry = _s1data.global.by_country;
   const vals = Object.values(byCountry).map(d => d.avg_views).filter(Boolean);
-  // Log scale so small/large differences are visible; start from #1c1c1c → bright red
-  const colorScale = d3.scaleLog()
-    .domain([d3.min(vals) * 0.5, d3.max(vals)])
-    .range(['#3a1a1a', '#ff3333'])
-    .clamp(true);
+  // Earthy Sequential scale (Espresso-Orange-Red) for better background contrast
+  const colorScale = d3.scaleSequential()
+    .domain([0, d3.max(vals) || 1])
+    .interpolator(d3.interpolateRgbBasis(['#3b2f2f', '#ff8c00', '#ff4444'])); 
 
   const countries = topojson.feature(_topo, _topo.objects.countries);
   const flags = _s1data.country_flags || {};
@@ -209,11 +208,11 @@ function repaintMapFills(animate) {
     let cs;
     if (_metric === 'publish_time') {
       cs = d3.scaleSequential().domain([0, publishHourZmax()])
-        .interpolator(t => d3.interpolateRgb('#1c1c1c', '#ff4444')(t));
+        .interpolator(d3.interpolateRgbBasis(['#3b2f2f', '#ff8c00', '#ff4444']));
     } else {
       const vals = _s1data.countries.map(c => metricVal(c)).filter(Boolean);
       cs = d3.scaleSequential().domain([0, d3.max(vals) || 1])
-        .interpolator(t => d3.interpolateRgb('#1c1c1c', '#ff4444')(t));
+        .interpolator(d3.interpolateRgbBasis(['#3b2f2f', '#ff8c00', '#ff4444']));
     }
     const sel = d3.selectAll('.has-data');
     const fillFn = (d) => {
@@ -233,7 +232,11 @@ function setupMetricToggle() {
       btn.classList.add('active');
       _metric = btn.dataset.metric;
       const pubPanel = document.getElementById('pub-hour-panel');
-      if (pubPanel) pubPanel.hidden = _metric !== 'publish_time';
+      if (pubPanel) {
+        pubPanel.hidden = _metric !== 'publish_time';
+        pubPanel.style.display = (_metric === 'publish_time') ? 'block' : 'none';
+        console.log('Publication panel visibility toggled:', !pubPanel.hidden, _metric);
+      }
       if (_metric === 'publish_time') {
         const s = document.getElementById('pub-hour-slider');
         const v = document.getElementById('pub-hour-val');
@@ -241,7 +244,12 @@ function setupMetricToggle() {
         if (v) v.textContent = String(_pubHour);
       }
       repaintMapFills(true);
-      document.getElementById('map-legend').querySelector('span:last-child').textContent = metricLabel();
+      const leg = document.getElementById('map-legend');
+      if (leg) {
+        leg.querySelector('span:last-child').textContent = metricLabel();
+        // Force legend gradient update
+        leg.querySelector('.leg-grad').style.background = 'linear-gradient(to right, #3b2f2f, #ff8c00, #ff4444)';
+      }
       syncMapMetricDefinition();
     });
   });
@@ -272,8 +280,8 @@ function drawCatHeatmap() {
     if (tot) pcts.push(((count_heatmap[c] || {})[cat] || 0) / tot * 100);
   }));
   const cs = d3.scaleSequential()
-    .domain([0, d3.quantile(pcts.sort(d3.ascending), 0.95)])
-    .interpolator(t => d3.interpolateRgb('#181818', '#ff4444')(t));
+    .domain([0, d3.quantile(pcts.sort(d3.ascending), 0.95) || 1])
+    .interpolator(d3.interpolateRgbBasis(['#3b2f2f', '#ff8c00', '#ff4444']));
 
   // Country headers (flags)
   svg.selectAll('.hm-ch').data(countries).join('text')
