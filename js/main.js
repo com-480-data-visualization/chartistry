@@ -37,10 +37,14 @@
   });
 
   // ── Init scenes ─────────────────────────────────────────────
-  await initScene1(appData, (code, cat) => {
-    navigateTo('scene-2');
-    preSelectCountry(code, cat);
-  });
+  try {
+    await initScene1(appData, (code, cat) => {
+      navigateTo('scene-2');
+      preSelectCountry(code, cat);
+    });
+  } catch (e) {
+    console.error('Scene 1 init failed:', e);
+  }
 
   initScene2(appData, (country, category) => {
     renderFormula(appData, country, category);
@@ -53,13 +57,16 @@
   // Back button
   document.getElementById('back-btn').addEventListener('click', () => navigateTo('scene-2'));
 
+  // ── Viral Duel ───────────────────────────────────────────────
+  initDuel(appData);
+
   // ── Navigation ──────────────────────────────────────────────
   function navigateTo(id) {
     document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
   }
 
   // Active nav link highlight on scroll
-  const scenes = ['scene-0', 'scene-1', 'scene-2', 'scene-3'];
+  const scenes = ['scene-0', 'scene-1', 'scene-2', 'scene-3', 'scene-4'];
   const observer = new IntersectionObserver(entries => {
     entries.forEach(entry => {
       if (!entry.isIntersecting) return;
