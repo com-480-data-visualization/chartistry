@@ -20,11 +20,6 @@
 
 **Published URL:** [com-480-data-visualization.github.io/chartistry](https://com-480-data-visualization.github.io/chartistry/)
 
-> [!IMPORTANT]
-> **No Manual Deployment Required!** 
-> The project has been restructured so all frontend files live in the repository root. GitHub Pages is configured to build directly from **`master` branch (`/root` folder)**. 
-> Whenever you run a standard `git push origin master`, GitHub automatically deploys your updates in the background. **Do not use `gh-pages` branches or push scripts!**
-
 **Local Preview (Run directly from repository root):**
 ```bash
 python3 -m http.server 8080
