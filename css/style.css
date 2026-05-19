@@ -387,7 +387,7 @@ body {
   width: 100px;
   height: 7px;
   border-radius: 4px;
-  background: linear-gradient(to right, #1c1c1c, var(--red));
+  background: linear-gradient(to right, #1c1010, #5c0c0c, #b71c1c, #ff4500, #ff1a1a);
 }
 
 /* Heatmap */
@@ -730,25 +730,102 @@ body {
   gap: 0.85rem;
 }
 
+.video-grid.reel-mode {
+  display: flex !important;
+  overflow-x: auto;
+  gap: 1.25rem;
+  padding: 0.5rem 0.2rem 1.5rem;
+  scrollbar-width: thin;
+  scrollbar-color: var(--red-dim) transparent;
+}
+
+.video-grid.reel-mode::-webkit-scrollbar { height: 5px; }
+.video-grid.reel-mode::-webkit-scrollbar-thumb { background: var(--red-dim); border-radius: 10px; }
+
+.video-grid.reel-mode .vcard {
+  flex: 0 0 240px;
+  background: var(--surf1);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.25s ease;
+}
+
+.video-grid.reel-mode .vcard:hover {
+  transform: translateY(-5px);
+  border-color: var(--red);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+}
+
 .vcard {
   border-radius: 10px;
   overflow: hidden;
   background: var(--surf2);
   border: 1px solid var(--border);
-  transition: transform 0.18s, border-color 0.18s;
+  transition: transform 0.25s cubic-bezier(0.25, 1, 0.5, 1), border-color 0.25s ease, box-shadow 0.25s ease;
 }
 
 .vcard:hover {
-  transform: translateY(-3px);
-  border-color: #444;
+  transform: translateY(-5px);
+  border-color: var(--red);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.5);
+}
+
+.vcard-thumb-container {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 16/9;
 }
 
 .vcard-thumb {
   width: 100%;
-  aspect-ratio: 16/9;
+  height: 100%;
   object-fit: cover;
   display: block;
   background: #111;
+  transition: transform 0.3s ease;
+}
+
+.vcard:hover .vcard-thumb {
+  transform: scale(1.05);
+}
+
+.vcard-play-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(2px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  pointer-events: none;
+}
+
+.vcard:hover .vcard-play-overlay {
+  opacity: 1;
+}
+
+.vcard-play-overlay span {
+  background: var(--red);
+  color: white;
+  padding: 0.4rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  box-shadow: 0 4px 15px rgba(255, 0, 0, 0.4);
+  transform: translateY(10px);
+  transition: transform 0.25s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.vcard:hover .vcard-play-overlay span {
+  transform: translateY(0);
 }
 
 .vcard-thumb-err {
@@ -867,9 +944,232 @@ body {
   animation: fadeIn 0.45s ease forwards;
 }
 
+/* Hook Distribution Chart */
+.hook-dist-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  margin: 1.5rem 0 2rem;
+}
+
+.hook-dist-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.8rem;
+  border-radius: var(--r);
+  background: var(--surf2);
+  border: 1px solid var(--border);
+  transition: transform 0.2s, border-color 0.2s, background-color 0.2s;
+  cursor: pointer;
+}
+
+.hook-dist-row:hover {
+  border-color: #777;
+  background: rgba(255, 255, 255, 0.05);
+  transform: translateX(4px);
+}
+
+.hook-dist-row.active {
+  border-color: var(--text);
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.hook-dist-main {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+}
+
+.hook-dist-label {
+  flex: 0 0 250px;
+  font-size: 0.73rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text);
+  white-space: normal;
+  line-height: 1.25;
+  padding-right: 0.5rem;
+}
+
+.hook-dist-bar-wrap {
+  flex: 1;
+  height: 8px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+}
+
+.hook-dist-bar {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.hook-dist-val {
+  min-width: 40px;
+  text-align: right;
+  font-size: 0.85rem;
+  font-weight: 800;
+  font-family: var(--fhead);
+  color: var(--text);
+}
+
+/* Interactive Dropdown Examples Styles */
+.hook-dist-ex-header {
+  margin-left: 170px;
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+  font-weight: 700;
+  border-top: 1px dashed var(--border);
+  padding-top: 0.5rem;
+  margin-top: 0.2rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.hook-examples-dropdown {
+  margin-left: 170px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding-bottom: 0.4rem;
+  animation: slideDown 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  max-height: 190px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,0.1) transparent;
+}
+
+.hook-examples-dropdown::-webkit-scrollbar {
+  width: 4px;
+}
+.hook-examples-dropdown::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.1);
+  border-radius: 2px;
+}
+
+.hook-ex-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+  font-size: 0.72rem;
+  color: var(--muted);
+  padding: 0.4rem 0.5rem;
+  border-radius: 4px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+
+.hook-ex-item:hover {
+  background: rgba(255,255,255,0.06);
+  border-color: rgba(255,255,255,0.1);
+  color: var(--text);
+}
+
+.hook-ex-title {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.hook-ex-views {
+  font-size: 0.65rem;
+  color: var(--muted);
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.hook-dist-row:hover .hook-ex-views {
+  color: #ccc;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.card-divider {
+  height: 1px;
+  background: var(--border);
+  margin: 2rem -1.5rem;
+}
+
+.card-header.mini {
+  margin-bottom: 0.8rem;
+}
+
+.card-header.mini h4 {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--dim);
+}
+
 .fade-up {
   opacity: 0;
   animation: fadeUp 0.45s ease forwards;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  .global-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .formula-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .fcard-cloud,
+  .fcard-videos,
+  .fcard-hooks {
+    grid-row: auto;
+    grid-column: auto;
+  }
+
+  .video-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .selector-layout {
+    flex-direction: column;
+  }
+
+  .stat-ribbon {
+    flex-wrap: wrap;
+  }
+
+  .ribbon-stat {
+    flex-basis: 33%;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .duel-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .duel-or {
+    justify-self: center;
+    font-size: 0.78rem;
+  }
+
+  .hook-details-layout {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
 }
 
 /* Ensure [hidden] always wins regardless of display:flex overrides */
@@ -1155,47 +1455,288 @@ body {
   font-weight: 700;
 }
 
-/* ── RESPONSIVE ── */
-@media (max-width: 900px) {
-  .global-layout {
-    grid-template-columns: 1fr;
-  }
+/* ── Hook Stacked Bar Chart ── */
+.hook-stacked-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+  margin-top: 0.5rem;
+}
 
-  .formula-grid {
-    grid-template-columns: 1fr;
-  }
+.hook-stacked-bar-wrap {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 4px;
+}
 
-  .fcard-cloud,
-  .fcard-videos,
-  .fcard-hooks {
-    grid-row: auto;
-    grid-column: auto;
-  }
+.hook-stacked-bar {
+  display: flex;
+  height: 28px;
+  width: 100%;
+  border-radius: 6px;
+  overflow: hidden;
+  position: relative;
+}
 
-  .video-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
+.hook-bar-segment {
+  height: 100%;
+  cursor: pointer;
+  transition: width 1.2s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.2s, transform 0.15s;
+}
 
-  .selector-layout {
-    flex-direction: column;
-  }
+.hook-bar-segment:hover {
+  transform: scaleY(1.08);
+  filter: brightness(1.2);
+  z-index: 10;
+}
 
-  .stat-ribbon {
-    flex-wrap: wrap;
-  }
+.hook-details-layout {
+  display: grid;
+  grid-template-columns: 0.95fr 1.05fr;
+  gap: 2rem;
+  min-height: 200px;
+}
 
-  .ribbon-stat {
-    flex-basis: 33%;
-    border-bottom: 1px solid var(--border);
-  }
+/* Legend items */
+.hook-legend-side {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
 
-  .duel-cards {
-    grid-template-columns: 1fr;
-  }
+.hook-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.65rem 0.85rem;
+  border-radius: var(--r);
+  background: var(--surf2);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
 
-  .duel-or {
-    justify-self: center;
-    font-size: 0.78rem;
-  }
+.hook-legend-item:hover {
+  background: var(--surf);
+  border-color: #555;
+  transform: translateX(4px);
+}
 
+.hook-legend-item.active {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: var(--dim);
+  box-shadow: var(--shadow);
+}
+
+.hook-legend-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.hook-legend-name {
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: var(--muted);
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.hook-legend-item.active .hook-legend-name {
+  color: var(--text);
+}
+
+.hook-legend-pct {
+  font-family: var(--fhead);
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--dim);
+}
+
+.hook-legend-item.active .hook-legend-pct {
+  color: var(--text);
+}
+
+/* Examples list on the right */
+.hook-examples-side {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: var(--r-lg);
+  padding: 1.1rem;
+  border: 1px solid var(--border);
+}
+
+.hook-ex-header-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-left: 0.4rem;
+  margin-bottom: 0.2rem;
+}
+
+.hook-ex-header-title {
+  font-family: var(--fhead);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.hook-ex-header-badge {
+  font-size: 0.62rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 0.15rem 0.5rem;
+  border-radius: 99px;
+  letter-spacing: 0.05em;
+}
+
+.hook-ex-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  max-height: 180px;
+  overflow-y: auto;
+  padding-right: 0.25rem;
+}
+
+/* Scrollbar styles for hook examples list */
+.hook-ex-grid::-webkit-scrollbar {
+  width: 5px;
+}
+.hook-ex-grid::-webkit-scrollbar-track {
+  background: transparent;
+}
+.hook-ex-grid::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+}
+.hook-ex-grid::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.hook-ex-card {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.65rem 0.8rem;
+  background: var(--surf2);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.15s ease;
+}
+
+.hook-ex-card:hover {
+  border-color: #555;
+  background: var(--surf);
+  transform: translateY(-1px);
+}
+
+.hook-ex-card-play {
+  font-size: 0.6rem;
+  color: var(--muted);
+  background: rgba(255,255,255,0.04);
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.15s;
+}
+
+.hook-ex-card:hover .hook-ex-card-play {
+  color: var(--red);
+  background: var(--red-dim);
+}
+
+.hook-ex-card-info {
+  min-width: 0;
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.hook-ex-card-title {
+  font-size: 0.74rem;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--text);
+  opacity: 0.9;
+  flex: 1;
+}
+
+.hook-ex-card-views {
+  font-size: 0.65rem;
+  color: var(--muted);
+  flex-shrink: 0;
+}
+
+.hook-ex-empty {
+  font-size: 0.72rem;
+  color: var(--muted);
+  font-style: italic;
+  padding: 1.5rem;
+  text-align: center;
+}
+
+/* Formula Proceed CTA */
+.formula-cta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-top: 3.5rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border);
+  gap: 1.25rem;
+  width: 100%;
+}
+
+.formula-cta-text h3 {
+  font-family: var(--fhead);
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin-bottom: 0.35rem;
+}
+
+.formula-cta-text p {
+  font-size: 0.8rem;
+  color: var(--muted);
+  max-width: 28rem;
+  line-height: 1.5;
+}
+
+.formula-cta-actions {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+#go-to-duel-btn {
+  background: var(--red);
+  color: #fff;
+  border: 1px solid transparent;
+  box-shadow: 0 4px 16px rgba(255, 68, 68, 0.25);
+  transition: all 0.2s ease;
+}
+
+#go-to-duel-btn:hover {
+  background: #ff5c5c;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 22px rgba(255, 68, 68, 0.4);
 }

@@ -37,14 +37,10 @@
   });
 
   // ── Init scenes ─────────────────────────────────────────────
-  try {
-    await initScene1(appData, (code, cat) => {
-      navigateTo('scene-2');
-      preSelectCountry(code, cat);
-    });
-  } catch (e) {
-    console.error('Scene 1 init failed:', e);
-  }
+  await initScene1(appData, (code, cat) => {
+    navigateTo('scene-2');
+    preSelectCountry(code, cat);
+  });
 
   initScene2(appData, (country, category) => {
     renderFormula(appData, country, category);

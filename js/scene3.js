@@ -27,8 +27,28 @@ function renderFormula(data, country, category) {
 
   drawWordCloud(combo.top_words || []);
   drawEmojiChart(combo.top_emojis || []);
-  drawVideos(combo.top_videos || []);
-  drawHooks(combo.hook_examples || []);
+  
+  // Video Shuffle Logic
+  const allVideos = combo.top_videos || [];
+  const shuffleBtn = document.getElementById('shuffle-videos-btn');
+  const doDraw = () => {
+    // Show 10 videos to scroll through for a rich, explorative user experience
+    const shuffled = [...allVideos].sort(() => Math.random() - 0.5).slice(0, 10);
+    drawVideos(shuffled);
+  };
+  if (shuffleBtn) {
+    shuffleBtn.onclick = () => {
+      const grid = document.getElementById('video-grid');
+      grid.style.opacity = 0;
+      setTimeout(() => {
+        doDraw();
+        grid.style.opacity = 1;
+      }, 200);
+    };
+  }
+  doDraw();
+
+  drawHookDistribution(combo.hook_distribution || {}, combo.hook_examples || []);
 }
 
 /* ── Word cloud ── */
@@ -107,53 +127,192 @@ function drawEmojiChart(emojis) {
 function drawVideos(videos) {
   const grid = document.getElementById('video-grid');
   grid.innerHTML = '';
+  grid.style.transition = 'opacity 0.3s ease';
   if (!videos.length) { grid.innerHTML = '<p style="color:#555;font-style:italic">No video data</p>'; return; }
 
   videos.forEach(v => {
     const thumbUrl = `https://i.ytimg.com/vi/${v.video_id}/mqdefault.jpg`;
     const card = document.createElement('div');
     card.className = 'vcard';
+    card.style.cursor = 'pointer';
+    card.setAttribute('title', 'Click to watch on YouTube');
+    
     card.innerHTML = `
-      <img class="vcard-thumb" src="${thumbUrl}" alt="${escHtml(v.title)}"
-           onerror="this.outerHTML='<div class=\\'vcard-thumb-err\\'>🎬</div>'"
-           loading="lazy">
+      <div class="vcard-thumb-container" style="position:relative; overflow:hidden;">
+        <img class="vcard-thumb" src="${thumbUrl}" alt="${escHtml(v.title)}"
+             onerror="this.outerHTML='<div class=\\'vcard-thumb-err\\'>🎬</div>'"
+             loading="lazy">
+        <div class="vcard-play-overlay">
+          <span>▶ Watch</span>
+        </div>
+      </div>
       <div class="vcard-info">
         <div class="vcard-title">${escHtml(v.title)}</div>
         <div class="vcard-views">${fmtViews(v.views)} views</div>
       </div>
     `;
+
+    card.addEventListener('click', () => {
+      window.open(`https://youtube.com/watch?v=${v.video_id}`, '_blank');
+    });
+
     grid.appendChild(card);
   });
 }
 
-/* ── Hook examples ── */
-function drawHooks(hooks) {
-  const list = document.getElementById('hook-list');
-  const card = document.getElementById('hooks-card');
-  list.innerHTML = '';
-  card.style.display = '';
+/* ── Hook distribution chart ── */
+function drawHookDistribution(dist, examples) {
+  const el = document.getElementById('hook-distribution');
+  el.innerHTML = '';
+  
+  // Filter out 0% and sort
+  const entries = Object.entries(dist)
+    .filter(([_, pct]) => pct > 0)
+    .sort((a,b) => b[1] - a[1]);
 
-  if (!hooks.length) {
-    list.innerHTML =
-      '<p class="hook-empty">No hook-style examples in this data export. ' +
-      'They fill in after you run <code>analysis/precompute.ipynb</code> with ' +
-      '<code>code/text_analysis/data/hook_labels_closed.json</code> present (from the text-analysis labelling step).</p>';
+  if (!entries.length) {
+    el.innerHTML = '<p class="hook-empty">No distribution data available yet.</p>';
     return;
   }
 
-  list.innerHTML = '<div class="hook-list">' +
-    hooks.map(h => {
-      const col = hookColor(h.hook);
-      return `
-        <div class="hook-item">
-          <span class="hook-badge" style="background:${col.bg};color:${col.color}">${escHtml(h.hook)}</span>
-          <div class="hook-body">
-            <div class="hook-title">${escHtml(h.title)}</div>
-            ${h.views ? `<div class="hook-views">${fmtViews(h.views)} views</div>` : ''}
+  // Create layout
+  const container = document.createElement('div');
+  container.className = 'hook-stacked-container';
+  
+  // 1. Stacked Bar Chart
+  const barWrapper = document.createElement('div');
+  barWrapper.className = 'hook-stacked-bar-wrap';
+  
+  const stackedBar = document.createElement('div');
+  stackedBar.className = 'hook-stacked-bar';
+  
+  // 2. Legend + Details layout
+  const detailsLayout = document.createElement('div');
+  detailsLayout.className = 'hook-details-layout';
+  
+  const legendSide = document.createElement('div');
+  legendSide.className = 'hook-legend-side';
+  
+  const examplesSide = document.createElement('div');
+  examplesSide.className = 'hook-examples-side';
+  
+  let activeHook = entries[0][0]; // Default to the #1 top hook!
+
+  // Render Stacked Bar Segments & Legend Rows
+  entries.forEach(([name, pct]) => {
+    const col = hookColor(name);
+    const displayPct = (pct * 100).toFixed(0) + '%';
+    
+    // Create segment
+    const segment = document.createElement('div');
+    segment.className = 'hook-bar-segment';
+    segment.style.width = '0%'; // Start at 0% for cool animation
+    segment.style.backgroundColor = col.color;
+    segment.dataset.w = (pct * 100) + '%';
+    segment.dataset.hook = name;
+    
+    segment.addEventListener('mouseenter', (event) => {
+      showTooltip(`
+        <div class="tt-name">${name}</div>
+        <div class="tt-row"><span>Niche Share</span><span class="tt-val">${displayPct}</span></div>
+        <div class="tt-row"><span style="font-size:0.7rem; color:var(--red);">Click to explore examples</span></div>
+      `, event);
+    });
+    segment.addEventListener('mousemove', moveTooltip);
+    segment.addEventListener('mouseleave', hideTooltip);
+    
+    segment.addEventListener('click', () => {
+      selectHook(name);
+    });
+    
+    stackedBar.appendChild(segment);
+    
+    // Create Legend Item
+    const legendItem = document.createElement('div');
+    legendItem.className = 'hook-legend-item';
+    legendItem.dataset.hook = name;
+    
+    legendItem.innerHTML = `
+      <span class="hook-legend-dot" style="background-color: ${col.color};"></span>
+      <span class="hook-legend-name">${name}</span>
+      <span class="hook-legend-pct">${displayPct}</span>
+    `;
+    
+    legendItem.addEventListener('click', () => {
+      selectHook(name);
+    });
+    
+    legendSide.appendChild(legendItem);
+  });
+  
+  barWrapper.appendChild(stackedBar);
+  container.appendChild(barWrapper);
+  
+  detailsLayout.appendChild(legendSide);
+  detailsLayout.appendChild(examplesSide);
+  container.appendChild(detailsLayout);
+  el.appendChild(container);
+  
+  // Select hook helper function
+  function selectHook(name) {
+    activeHook = name;
+    
+    // Update active visual states in bar segments
+    const segments = stackedBar.querySelectorAll('.hook-bar-segment');
+    segments.forEach(seg => {
+      seg.classList.toggle('active', seg.dataset.hook === name);
+      // Dim non-active segments
+      if (name) {
+        seg.style.opacity = seg.dataset.hook === name ? '1' : '0.35';
+      } else {
+        seg.style.opacity = '1';
+      }
+    });
+    
+    // Update active visual states in legends
+    const legendItems = legendSide.querySelectorAll('.hook-legend-item');
+    legendItems.forEach(item => {
+      item.classList.toggle('active', item.dataset.hook === name);
+    });
+    
+    // Render examples for this hook
+    const hookEx = examples.filter(ex => ex.hook === name);
+    const col = hookColor(name);
+    
+    examplesSide.innerHTML = `
+      <div class="hook-ex-header-bar" style="border-left: 3px solid ${col.color};">
+        <span class="hook-ex-header-title">🎥 Samples: ${name}</span>
+        <span class="hook-ex-header-badge" style="background-color: ${col.bg}; color: ${col.color};">${hookEx.length} videos</span>
+      </div>
+      <div class="hook-ex-grid">
+        ${hookEx.length ? hookEx.map(ex => `
+          <a class="hook-ex-card" href="https://youtube.com/watch?v=${ex.video_id}" target="_blank" title="Watch on YouTube">
+            <span class="hook-ex-card-play">▶</span>
+            <div class="hook-ex-card-info">
+              <div class="hook-ex-card-title">“${escHtml(ex.title)}”</div>
+              <div class="hook-ex-card-views">${fmtViews(ex.views)} views</div>
+            </div>
+          </a>
+        `).join('') : `
+          <div class="hook-ex-empty">
+            No active samples found in the top 100 for this hook category.
           </div>
-        </div>`;
-    }).join('') + '</div>';
+        `}
+      </div>
+    `;
+  }
+  
+  // Initialize default active hook examples
+  selectHook(activeHook);
+
+  // Cool entry animation for segments
+  requestAnimationFrame(() => {
+    stackedBar.querySelectorAll('.hook-bar-segment').forEach(seg => {
+      seg.style.width = seg.dataset.w;
+    });
+  });
 }
+
 
 function escHtml(s) {
   return String(s)

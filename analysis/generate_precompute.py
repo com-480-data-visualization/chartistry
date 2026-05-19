@@ -59,7 +59,7 @@ pd.set_option("display.max_columns", None)
 # ── Paths (notebook runs from analysis/, so go up one level) ──
 ROOT     = Path("..").resolve()   # → chartistry/
 DATA_DIR = ROOT / "data"
-OUT_DIR  = ROOT / "website" / "public"
+OUT_DIR  = ROOT / "public"
 HOOK_LABELS_PATH = ROOT / "code" / "text_analysis" / "data" / "hook_labels_elite.json"
 
 OUT_DIR.mkdir(parents=True, exist_ok=True)
@@ -320,7 +320,8 @@ def get_top_videos(grp: pd.DataFrame, n: int = 50) -> list:
     top = grp.nlargest(n, "views")
     return [
         {"video_id": row["video_id"], "title": row["title"],
-         "channel": row["channel_title"], "views": int(row["views"])}
+         "channel": row["channel_title"], "views": int(row["views"]),
+         "pub": row["publish_time"].strftime("%Y-%m-%dT%H:%M:%SZ") if pd.notna(row.get("publish_time")) else ""}
         for _, row in top.iterrows()
     ]
 

@@ -1,0 +1,19 @@
+# Dependency directories
+node_modules/
+
+# OS/System files
+.DS_Store
+Thumbs.db
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Local env files
+.env
+.env.local
+
+# Python cache / virtual envs
+__pycache__/
+*.pyc
+venv/
+.venv/

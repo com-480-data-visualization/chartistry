@@ -5,7 +5,7 @@ let _data = null;
 
 async function loadData() {
   if (_data) return _data;
-  const res = await fetch(DATA_URL);
+  const res = await fetch(`${DATA_URL}?v=${Date.now()}`);
   if (!res.ok) throw new Error(`Failed to load data.json: ${res.status}`);
   _data = await res.json();
   return _data;
@@ -34,12 +34,16 @@ function catIcon(cat) { return CAT_ICONS[cat] || '📌'; }
 
 // Hook badge color palette
 const HOOK_PALETTE = [
-  { bg:'rgba(255,68,68,0.15)',   color:'#ff6666' },
-  { bg:'rgba(100,180,255,0.15)', color:'#64b4ff' },
-  { bg:'rgba(120,220,160,0.15)', color:'#78dca0' },
-  { bg:'rgba(255,200,80,0.15)',  color:'#ffc850' },
-  { bg:'rgba(200,140,255,0.15)', color:'#c88cff' },
-  { bg:'rgba(255,160,80,0.15)',  color:'#ffa050' },
+  { bg: 'rgba(255, 68, 68, 0.15)',  color: '#ff4444' }, // Red (Attention)
+  { bg: 'rgba(100, 180, 255, 0.15)', color: '#64b4ff' }, // Blue (Official)
+  { bg: 'rgba(120, 220, 160, 0.15)', color: '#78dca0' }, // Green (Educational)
+  { bg: 'rgba(255, 200, 80, 0.15)',  color: '#ffc850' }, // Yellow (Curiosity)
+  { bg: 'rgba(200, 140, 255, 0.15)', color: '#c88cff' }, // Purple (Celebrity)
+  { bg: 'rgba(255, 130, 180, 0.15)', color: '#ff82b4' }, // Pink (Emotional)
+  { bg: 'rgba(255, 160, 80, 0.15)',  color: '#ffa050' }, // Orange (Challenge)
+  { bg: 'rgba(140, 240, 240, 0.15)', color: '#8cf0f0' }, // Cyan (Visual)
+  { bg: 'rgba(180, 180, 180, 0.15)', color: '#b4b4b4' }, // Gray (Metadata)
+  { bg: 'rgba(255, 255, 255, 0.10)', color: '#ffffff' }, // White (Other)
 ];
 const _hookColorCache = {};
 function hookColor(hook) {

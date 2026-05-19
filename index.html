@@ -14,7 +14,7 @@
   <script src="https://d3js.org/d3.v7.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/topojson-client@3/dist/topojson-client.min.js"></script>
   <script src="https://cdn.jsdelivr.net/gh/jasondavies/d3-cloud/build/d3.layout.cloud.js"></script>
-  <link rel="stylesheet" href="css/style.css?v=2">
+  <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
@@ -151,16 +151,33 @@
         <div id="emoji-chart"></div>
       </div>
       <div class="fcard fcard-videos">
-        <div class="card-header">
-          <h3>Sample trending videos</h3><span class="card-hint">Random pick from this country × category</span>
+        <div class="card-header" style="display:flex; justify-content:space-between; align-items:flex-start;">
+          <div>
+            <h3>Spotlight on Trending</h3>
+            <span class="card-hint">Handpicked glimpses of what’s trending in this region.</span>
+          </div>
+          <button id="shuffle-videos-btn" class="btn-ghost btn-sm" title="Shuffle samples">
+            <span>🎲</span> Shuffle
+          </button>
         </div>
-        <div id="video-grid" class="video-grid"></div>
+        <div id="video-grid" class="video-grid reel-mode" style="display:flex; overflow-x:auto; gap:1.2rem; padding-bottom:1rem; scroll-behavior:smooth;"></div>
       </div>
       <div class="fcard fcard-hooks" id="hooks-card">
         <div class="card-header">
-          <h3>Hook styles</h3><span class="card-hint">Random labelled examples for this country × category</span>
+          <h3>The Winning Hook</h3><span class="card-hint">Which rhetorical strategies define virality in this niche?</span>
         </div>
-        <div id="hook-list"></div>
+        <div id="hook-distribution" class="hook-dist-container"></div>
+      </div>
+    </div>
+    <!-- Proceed to Duel CTA -->
+    <div class="scene-cta formula-cta fade-up">
+      <div class="formula-cta-text">
+        <h3>Mastered the Niche? 🧠</h3>
+        <p>Put your instincts to the test! Guess which real-world video had more views in our head-to-head duel game.</p>
+      </div>
+      <div class="formula-cta-actions">
+        <a href="#scene-4" class="btn-primary" id="go-to-duel-btn">Play the Viral Duel 🎮</a>
+        <a href="#scene-2" class="btn-ghost" id="go-to-explore-btn">← Explore Another Niche</a>
       </div>
     </div>
   </section>
@@ -198,12 +215,12 @@
   <!-- Tooltip (shared) -->
   <div class="tooltip" id="tooltip"></div>
 
-  <script src="js/utils.js"></script>
-  <script src="js/scene1.js"></script>
-  <script src="js/scene2.js"></script>
-  <script src="js/scene3.js"></script>
-  <script src="js/scene4.js"></script>
-  <script src="js/main.js"></script>
+  <script src="js/utils.js?v=3"></script>
+  <script src="js/scene1.js?v=3"></script>
+  <script src="js/scene2.js?v=3"></script>
+  <script src="js/scene3.js?v=3"></script>
+  <script src="js/scene4.js?v=3"></script>
+  <script src="js/main.js?v=3"></script>
 </body>
 
 </html>
