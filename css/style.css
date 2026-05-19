@@ -387,7 +387,7 @@ body {
   width: 100px;
   height: 7px;
   border-radius: 4px;
-  background: linear-gradient(to right, #1c1010, #5c0c0c, #b71c1c, #ff4500, #ff1a1a);
+  background: linear-gradient(to right, #140707, #660a0a, #c81010, #ff3300, #ff0000);
 }
 
 /* Heatmap */

@@ -164,8 +164,9 @@ df = df.rename(columns={"view_count": "views", "like_count": "likes"})
 for col in ["title", "tags", "description", "channel_title"]:
     df[col] = df.get(col, pd.Series("", index=df.index)).fillna("").astype(str)
 
-print("Fixing double-encodings in titles...")
+print("Fixing double-encodings in titles & channel names...")
 df["title"] = df["title"].apply(smart_fix)
+df["channel_title"] = df["channel_title"].apply(smart_fix)
 
 for col in ["views", "likes", "dislikes", "comment_count", "category_id"]:
     if col in df.columns:
