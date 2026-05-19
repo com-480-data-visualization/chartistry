@@ -72,7 +72,7 @@
         l.classList.toggle('active', l.dataset.scene === sceneNum);
       });
     });
-  }, { threshold: 0.4 });
+  }, { rootMargin: '-30% 0px -60% 0px', threshold: 0 });
 
   scenes.forEach(id => {
     const el = document.getElementById(id);

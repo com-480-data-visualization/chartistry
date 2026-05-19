@@ -12,7 +12,6 @@ function renderFormula(data, country, category) {
 
   document.getElementById('formula-title').textContent =
     `${flags[country]||''} ${names[country]||country} × ${catIcon(category)} ${category}`;
-  document.getElementById('nav-formula').classList.add('unlocked');
 
   document.getElementById('s-videos').textContent  = combo.video_count.toLocaleString();
   document.getElementById('s-views').textContent   = fmtViews(combo.avg_views);
