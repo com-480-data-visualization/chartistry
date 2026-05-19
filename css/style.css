@@ -677,6 +677,120 @@ body {
   grid-column: 1 / 3;
 }
 
+.fcard-timing {
+  grid-column: 1 / 3;
+}
+
+/* Timing & Engagement card */
+.timing-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+.timing-bottom-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2.5rem;
+  align-items: stretch;
+}
+
+.timing-hist-section {
+  display: flex;
+  flex-direction: column;
+}
+
+#days-hist {
+  flex: 1;
+  min-height: 260px;
+}
+
+.timing-section-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #bbb;
+  margin-bottom: 1rem;
+}
+
+.timing-label-sub {
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+#timing-heatmap svg { display: block; width: 100%; }
+#days-hist svg      { display: block; width: 100%; }
+
+/* Engagement bars */
+.engage-group {
+  margin-bottom: 1.6rem;
+}
+
+.engage-group:last-child {
+  margin-bottom: 0;
+}
+
+.engage-group-label {
+  font-size: 0.74rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  margin-bottom: 0.7rem;
+}
+
+.engage-bar-row {
+  display: grid;
+  grid-template-columns: 1fr 2fr auto;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.55rem;
+}
+
+.engage-bar-name {
+  font-size: 0.76rem;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.engage-bar-name-world {
+  color: var(--muted);
+}
+
+.engage-bar-track {
+  height: 9px;
+  background: var(--surf2);
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.engage-bar-fill {
+  height: 100%;
+  border-radius: 5px;
+  transition: width 0.8s ease;
+}
+
+.engage-bar-fill.niche {
+  background: linear-gradient(90deg, #cc1111, #ff4444);
+}
+
+.engage-bar-fill.baseline {
+  background: #3a3a3a;
+}
+
+.engage-val {
+  font-family: var(--fhead);
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text);
+  min-width: 42px;
+  text-align: right;
+}
+
 /* Word cloud */
 #word-cloud {
   width: 100%;
@@ -1135,9 +1249,14 @@ body {
 
   .fcard-cloud,
   .fcard-videos,
-  .fcard-hooks {
+  .fcard-hooks,
+  .fcard-timing {
     grid-row: auto;
     grid-column: auto;
+  }
+
+  .timing-bottom-row {
+    grid-template-columns: 1fr;
   }
 
   .video-grid {

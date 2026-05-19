@@ -14,7 +14,7 @@
   <script src="https://d3js.org/d3.v7.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/topojson-client@3/dist/topojson-client.min.js"></script>
   <script src="https://cdn.jsdelivr.net/gh/jasondavies/d3-cloud/build/d3.layout.cloud.js"></script>
-  <link rel="stylesheet" href="css/style.css?v=4">
+  <link rel="stylesheet" href="css/style.css?v=5">
 </head>
 
 <body>
@@ -168,6 +168,28 @@
         </div>
         <div id="hook-distribution" class="hook-dist-container"></div>
       </div>
+      <div class="fcard fcard-timing">
+        <div class="card-header">
+          <h3>Timing &amp; Engagement</h3>
+          <span class="card-hint">Best publish windows and how engaged this audience is</span>
+        </div>
+        <div class="timing-layout">
+          <div class="timing-heatmap-section">
+            <div class="timing-section-label">Avg Views by Publish Time <span class="timing-label-sub">(UTC hour × day of week)</span></div>
+            <div id="timing-heatmap"></div>
+          </div>
+          <div class="timing-bottom-row">
+            <div class="timing-engage-section">
+              <div class="timing-section-label">Audience Stats</div>
+              <div id="engage-chart"></div>
+            </div>
+            <div class="timing-hist-section">
+              <div class="timing-section-label">Days from Publish to Trending</div>
+              <div id="days-hist"></div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
     <!-- Proceed to Duel CTA -->
     <div class="scene-cta formula-cta fade-up">
@@ -215,12 +237,12 @@
   <!-- Tooltip (shared) -->
   <div class="tooltip" id="tooltip"></div>
 
-  <script src="js/utils.js?v=4"></script>
-  <script src="js/scene1.js?v=4"></script>
-  <script src="js/scene2.js?v=4"></script>
-  <script src="js/scene3.js?v=4"></script>
-  <script src="js/scene4.js?v=4"></script>
-  <script src="js/main.js?v=4"></script>
+  <script src="js/utils.js?v=5"></script>
+  <script src="js/scene1.js?v=5"></script>
+  <script src="js/scene2.js?v=5"></script>
+  <script src="js/scene3.js?v=5"></script>
+  <script src="js/scene4.js?v=5"></script>
+  <script src="js/main.js?v=5"></script>
 </body>
 
 </html>

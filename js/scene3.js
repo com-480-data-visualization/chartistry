@@ -1,4 +1,4 @@
-// scene3.js — The Formula: word cloud, emojis, thumbnails, hooks
+// scene3.js
 
 function renderFormula(data, country, category) {
   const combo = (data.by_country_category[country] || {})[category];
@@ -10,12 +10,10 @@ function renderFormula(data, country, category) {
     return;
   }
 
-  // Header
   document.getElementById('formula-title').textContent =
     `${flags[country]||''} ${names[country]||country} × ${catIcon(category)} ${category}`;
   document.getElementById('nav-formula').classList.add('unlocked');
 
-  // Stat ribbon
   document.getElementById('s-videos').textContent  = combo.video_count.toLocaleString();
   document.getElementById('s-views').textContent   = fmtViews(combo.avg_views);
   document.getElementById('s-emoji').textContent   = combo.emoji_count_avg.toFixed(1);
@@ -27,12 +25,13 @@ function renderFormula(data, country, category) {
 
   drawWordCloud(combo.top_words || []);
   drawEmojiChart(combo.top_emojis || []);
-  
-  // Video Shuffle Logic
+  drawTimingHeatmap(combo.timing_heatmap || [], combo.best_day, combo.best_hour);
+  drawEngagementBars(combo.avg_views, combo.avg_likes, combo.avg_comments, data, country, category);
+  drawDaysHistogram(combo.days_to_trend_hist || []);
+
   const allVideos = combo.top_videos || [];
   const shuffleBtn = document.getElementById('shuffle-videos-btn');
   const doDraw = () => {
-    // Show 10 videos to scroll through for a rich, explorative user experience
     const shuffled = [...allVideos].sort(() => Math.random() - 0.5).slice(0, 10);
     drawVideos(shuffled);
   };
@@ -40,10 +39,7 @@ function renderFormula(data, country, category) {
     shuffleBtn.onclick = () => {
       const grid = document.getElementById('video-grid');
       grid.style.opacity = 0;
-      setTimeout(() => {
-        doDraw();
-        grid.style.opacity = 1;
-      }, 200);
+      setTimeout(() => { doDraw(); grid.style.opacity = 1; }, 200);
     };
   }
   doDraw();
@@ -51,7 +47,6 @@ function renderFormula(data, country, category) {
   drawHookDistribution(combo.hook_distribution || {}, combo.hook_examples || []);
 }
 
-/* ── Word cloud ── */
 function drawWordCloud(words) {
   const el = document.getElementById('word-cloud');
   el.innerHTML = '';
@@ -98,7 +93,6 @@ function drawWordCloud(words) {
     .start();
 }
 
-/* ── Emoji bar chart ── */
 function drawEmojiChart(emojis) {
   const el = document.getElementById('emoji-chart');
   el.innerHTML = '';
@@ -115,15 +109,11 @@ function drawEmojiChart(emojis) {
       </div>
     `);
   });
-  // Animate bars after paint
   requestAnimationFrame(() => {
-    el.querySelectorAll('.emoji-fill').forEach(bar => {
-      bar.style.width = bar.dataset.w;
-    });
+    el.querySelectorAll('.emoji-fill').forEach(bar => { bar.style.width = bar.dataset.w; });
   });
 }
 
-/* ── Thumbnail video grid ── */
 function drawVideos(videos) {
   const grid = document.getElementById('video-grid');
   grid.innerHTML = '';
@@ -136,7 +126,7 @@ function drawVideos(videos) {
     card.className = 'vcard';
     card.style.cursor = 'pointer';
     card.setAttribute('title', 'Click to watch on YouTube');
-    
+
     card.innerHTML = `
       <div class="vcard-thumb-container" style="position:relative; overflow:hidden;">
         <img class="vcard-thumb" src="${thumbUrl}" alt="${escHtml(v.title)}"
@@ -160,12 +150,10 @@ function drawVideos(videos) {
   });
 }
 
-/* ── Hook distribution chart ── */
 function drawHookDistribution(dist, examples) {
   const el = document.getElementById('hook-distribution');
   el.innerHTML = '';
-  
-  // Filter out 0% and sort
+
   const entries = Object.entries(dist)
     .filter(([_, pct]) => pct > 0)
     .sort((a,b) => b[1] - a[1]);
@@ -175,42 +163,37 @@ function drawHookDistribution(dist, examples) {
     return;
   }
 
-  // Create layout
   const container = document.createElement('div');
   container.className = 'hook-stacked-container';
-  
-  // 1. Stacked Bar Chart
+
   const barWrapper = document.createElement('div');
   barWrapper.className = 'hook-stacked-bar-wrap';
-  
+
   const stackedBar = document.createElement('div');
   stackedBar.className = 'hook-stacked-bar';
-  
-  // 2. Legend + Details layout
+
   const detailsLayout = document.createElement('div');
   detailsLayout.className = 'hook-details-layout';
-  
+
   const legendSide = document.createElement('div');
   legendSide.className = 'hook-legend-side';
-  
+
   const examplesSide = document.createElement('div');
   examplesSide.className = 'hook-examples-side';
-  
-  let activeHook = entries[0][0]; // Default to the #1 top hook!
 
-  // Render Stacked Bar Segments & Legend Rows
+  let activeHook = entries[0][0];
+
   entries.forEach(([name, pct]) => {
     const col = hookColor(name);
     const displayPct = (pct * 100).toFixed(0) + '%';
-    
-    // Create segment
+
     const segment = document.createElement('div');
     segment.className = 'hook-bar-segment';
-    segment.style.width = '0%'; // Start at 0% for cool animation
+    segment.style.width = '0%';
     segment.style.backgroundColor = col.color;
     segment.dataset.w = (pct * 100) + '%';
     segment.dataset.hook = name;
-    
+
     segment.addEventListener('mouseenter', (event) => {
       showTooltip(`
         <div class="tt-name">${name}</div>
@@ -220,65 +203,44 @@ function drawHookDistribution(dist, examples) {
     });
     segment.addEventListener('mousemove', moveTooltip);
     segment.addEventListener('mouseleave', hideTooltip);
-    
-    segment.addEventListener('click', () => {
-      selectHook(name);
-    });
-    
+    segment.addEventListener('click', () => selectHook(name));
+
     stackedBar.appendChild(segment);
-    
-    // Create Legend Item
+
     const legendItem = document.createElement('div');
     legendItem.className = 'hook-legend-item';
     legendItem.dataset.hook = name;
-    
     legendItem.innerHTML = `
       <span class="hook-legend-dot" style="background-color: ${col.color};"></span>
       <span class="hook-legend-name">${name}</span>
       <span class="hook-legend-pct">${displayPct}</span>
     `;
-    
-    legendItem.addEventListener('click', () => {
-      selectHook(name);
-    });
-    
+    legendItem.addEventListener('click', () => selectHook(name));
     legendSide.appendChild(legendItem);
   });
-  
+
   barWrapper.appendChild(stackedBar);
   container.appendChild(barWrapper);
-  
   detailsLayout.appendChild(legendSide);
   detailsLayout.appendChild(examplesSide);
   container.appendChild(detailsLayout);
   el.appendChild(container);
-  
-  // Select hook helper function
+
   function selectHook(name) {
     activeHook = name;
-    
-    // Update active visual states in bar segments
-    const segments = stackedBar.querySelectorAll('.hook-bar-segment');
-    segments.forEach(seg => {
+
+    stackedBar.querySelectorAll('.hook-bar-segment').forEach(seg => {
       seg.classList.toggle('active', seg.dataset.hook === name);
-      // Dim non-active segments
-      if (name) {
-        seg.style.opacity = seg.dataset.hook === name ? '1' : '0.35';
-      } else {
-        seg.style.opacity = '1';
-      }
+      seg.style.opacity = seg.dataset.hook === name ? '1' : '0.35';
     });
-    
-    // Update active visual states in legends
-    const legendItems = legendSide.querySelectorAll('.hook-legend-item');
-    legendItems.forEach(item => {
+
+    legendSide.querySelectorAll('.hook-legend-item').forEach(item => {
       item.classList.toggle('active', item.dataset.hook === name);
     });
-    
-    // Render examples for this hook
+
     const hookEx = examples.filter(ex => ex.hook === name);
     const col = hookColor(name);
-    
+
     examplesSide.innerHTML = `
       <div class="hook-ex-header-bar" style="border-left: 3px solid ${col.color};">
         <span class="hook-ex-header-title">🎥 Samples: ${name}</span>
@@ -289,7 +251,7 @@ function drawHookDistribution(dist, examples) {
           <a class="hook-ex-card" href="https://youtube.com/watch?v=${ex.video_id}" target="_blank" title="Watch on YouTube">
             <span class="hook-ex-card-play">▶</span>
             <div class="hook-ex-card-info">
-              <div class="hook-ex-card-title">“${escHtml(ex.title)}”</div>
+              <div class="hook-ex-card-title">"${escHtml(ex.title)}"</div>
               <div class="hook-ex-card-views">${fmtViews(ex.views)} views</div>
             </div>
           </a>
@@ -301,11 +263,9 @@ function drawHookDistribution(dist, examples) {
       </div>
     `;
   }
-  
-  // Initialize default active hook examples
+
   selectHook(activeHook);
 
-  // Cool entry animation for segments
   requestAnimationFrame(() => {
     stackedBar.querySelectorAll('.hook-bar-segment').forEach(seg => {
       seg.style.width = seg.dataset.w;
@@ -313,6 +273,242 @@ function drawHookDistribution(dist, examples) {
   });
 }
 
+function drawTimingHeatmap(heatmapData, bestDay, bestHour) {
+  const el = document.getElementById('timing-heatmap');
+  el.innerHTML = '';
+  if (!heatmapData.length) {
+    el.innerHTML = '<p style="color:#555;font-style:italic;padding:0.5rem">No timing data</p>';
+    return;
+  }
+
+  const DAYS = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+  const HOURS = Array.from({length: 24}, (_, i) => i);
+
+  const lookup = {};
+  DAYS.forEach(d => { lookup[d] = {}; });
+  heatmapData.forEach(e => { if (lookup[e.day]) lookup[e.day][e.hour] = e.avg_views; });
+
+  const maxVal = d3.max(heatmapData, e => e.avg_views) || 1;
+
+  // Inferno avoids the all-red look while still reading as a heat map
+  const colorScale = d3.scaleSequential([0, maxVal], d3.interpolateInferno);
+
+  const containerW = el.clientWidth || 560;
+  const cellW = Math.max(12, Math.floor((containerW - 52) / 24));
+  const cellH = 30;
+  const marginL = 36, marginT = 22, marginB = 38;
+  const W = marginL + 24 * cellW;
+  const H = marginT + 7 * cellH + marginB;
+
+  const svg = d3.select('#timing-heatmap').append('svg')
+    .attr('viewBox', `0 0 ${W} ${H}`)
+    .attr('preserveAspectRatio', 'xMinYMin meet')
+    .style('width', '100%');
+
+  HOURS.filter(h => h % 3 === 0).forEach(h => {
+    svg.append('text')
+      .attr('x', marginL + h * cellW + cellW / 2)
+      .attr('y', marginT - 5)
+      .attr('text-anchor', 'middle')
+      .attr('font-size', 11)
+      .attr('fill', '#aaa')
+      .text(`${h}h`);
+  });
+
+  DAYS.forEach((day, di) => {
+    svg.append('text')
+      .attr('x', marginL - 4)
+      .attr('y', marginT + di * cellH + cellH / 2 + 3.5)
+      .attr('text-anchor', 'end')
+      .attr('font-size', 11)
+      .attr('fill', '#bbb')
+      .text(day.slice(0, 3));
+
+    HOURS.forEach(h => {
+      const val = lookup[day][h];
+      const isBest = day === bestDay && h === bestHour;
+      const hasData = val != null;
+
+      svg.append('rect')
+        .attr('x', marginL + h * cellW + 1)
+        .attr('y', marginT + di * cellH + 1)
+        .attr('width', cellW - 2)
+        .attr('height', cellH - 2)
+        .attr('rx', 2)
+        .attr('fill', hasData ? colorScale(val) : '#111')
+        .style('cursor', hasData ? 'pointer' : 'default')
+        .on('mouseenter', hasData ? (event) => {
+          showTooltip(`
+            <div class="tt-name">${day}, ${h}:00 UTC</div>
+            <div class="tt-row"><span>Avg Views</span><span class="tt-val">${fmtViews(val)}</span></div>
+            ${isBest ? '<div style="color:#fcd34d;font-size:0.72rem;margin-top:0.3rem">★ Best window</div>' : ''}
+          `, event);
+        } : null)
+        .on('mousemove', hasData ? moveTooltip : null)
+        .on('mouseleave', hasData ? hideTooltip : null);
+
+      if (isBest) {
+        svg.append('rect')
+          .attr('x', marginL + h * cellW)
+          .attr('y', marginT + di * cellH)
+          .attr('width', cellW)
+          .attr('height', cellH)
+          .attr('rx', 3)
+          .attr('fill', 'none')
+          .attr('stroke', '#fcd34d')
+          .attr('stroke-width', 2)
+          .style('pointer-events', 'none');
+      }
+    });
+  });
+
+  const legW = 120, legH = 8;
+  const legX = marginL + 24 * cellW - legW;
+  const legY = H - marginB + 14;
+  const legGrad = svg.append('defs').append('linearGradient')
+    .attr('id', 'timing-legend-grad')
+    .attr('x1', '0%').attr('x2', '100%');
+  [0, 0.25, 0.5, 0.75, 1].forEach(t => {
+    legGrad.append('stop').attr('offset', `${t * 100}%`).attr('stop-color', d3.interpolateInferno(t));
+  });
+  svg.append('rect')
+    .attr('x', legX).attr('y', legY)
+    .attr('width', legW).attr('height', legH)
+    .attr('rx', 3)
+    .attr('fill', 'url(#timing-legend-grad)')
+    .attr('stroke', '#333').attr('stroke-width', 0.5);
+  svg.append('text').attr('x', legX).attr('y', legY + legH + 11)
+    .attr('font-size', 10).attr('fill', '#999').text('fewer views');
+  svg.append('text').attr('x', legX + legW).attr('y', legY + legH + 11)
+    .attr('text-anchor', 'end').attr('font-size', 10).attr('fill', '#ddd').text('more views');
+}
+
+function drawEngagementBars(avgViews, avgLikes, avgComments, data, country, category) {
+  const el = document.getElementById('engage-chart');
+  el.innerHTML = '';
+
+  const flag = (data.country_flags || {})[country] || '';
+  const name = (data.country_names || {})[country] || country;
+  const thisLabel  = `${flag} ${name} ${category}`;
+  const worldLabel = `${category} worldwide`;
+
+  const countryList = data.countries || [];
+  const worldViews    = d3.mean(countryList.map(c => data.by_country_category[c]?.[category]?.avg_views).filter(v => v != null));
+  const worldLikes    = d3.mean(countryList.map(c => data.by_country_category[c]?.[category]?.avg_likes).filter(v => v != null));
+  const worldComments = d3.mean(countryList.map(c => data.by_country_category[c]?.[category]?.avg_comments).filter(v => v != null));
+
+  const metrics = [
+    { label: 'Avg Views',    niche: avgViews,    world: worldViews    },
+    { label: 'Avg Likes',    niche: avgLikes,    world: worldLikes    },
+    { label: 'Avg Comments', niche: avgComments, world: worldComments },
+  ];
+
+  metrics.forEach(({ label, niche, world }) => {
+    const maxVal = Math.max(niche || 0, world || 0) || 1;
+    const nicheW = ((niche || 0) / maxVal * 100).toFixed(1);
+    const worldW = ((world || 0) / maxVal * 100).toFixed(1);
+
+    el.insertAdjacentHTML('beforeend', `
+      <div class="engage-group">
+        <div class="engage-group-label">${label}</div>
+        <div class="engage-bar-row">
+          <div class="engage-bar-name">${thisLabel}</div>
+          <div class="engage-bar-track">
+            <div class="engage-bar-fill niche" style="width:0%" data-w="${nicheW}%"></div>
+          </div>
+          <div class="engage-val">${fmtViews(niche || 0)}</div>
+        </div>
+        <div class="engage-bar-row">
+          <div class="engage-bar-name engage-bar-name-world">${worldLabel}</div>
+          <div class="engage-bar-track">
+            <div class="engage-bar-fill baseline" style="width:0%" data-w="${worldW}%"></div>
+          </div>
+          <div class="engage-val" style="color:var(--muted)">${fmtViews(world || 0)}</div>
+        </div>
+      </div>
+    `);
+  });
+
+  requestAnimationFrame(() => {
+    el.querySelectorAll('.engage-bar-fill').forEach(bar => { bar.style.width = bar.dataset.w; });
+  });
+}
+
+function drawDaysHistogram(histData) {
+  const el = document.getElementById('days-hist');
+  el.innerHTML = '';
+  const visible = histData.filter(d => d.count > 0);
+  if (!visible.length) {
+    el.innerHTML = '<p style="color:#555;font-style:italic">No data</p>';
+    return;
+  }
+
+  const margin = { top: 12, right: 14, bottom: 38, left: 38 };
+  const totalW = el.clientWidth || 320;
+  const totalH = Math.max(el.clientHeight || 0, 280);
+  const W = totalW - margin.left - margin.right;
+  const H = totalH - margin.top - margin.bottom;
+
+  const svg = d3.select('#days-hist').append('svg')
+    .attr('width', '100%')
+    .attr('height', totalH);
+
+  const g = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
+
+  const maxCount = d3.max(histData, d => d.count) || 1;
+
+  const x = d3.scaleBand()
+    .domain(histData.map(d => d.day))
+    .range([0, W])
+    .padding(0.08);
+
+  const y = d3.scaleLinear().domain([0, maxCount]).range([H, 0]);
+
+  g.selectAll('rect')
+    .data(histData)
+    .join('rect')
+    .attr('x', d => x(d.day))
+    .attr('y', d => y(d.count))
+    .attr('width', x.bandwidth())
+    .attr('height', d => H - y(d.count))
+    .attr('fill', d => d.count === 0 ? 'transparent' : '#ff4444')
+    .attr('rx', 2)
+    .style('cursor', d => d.count > 0 ? 'pointer' : 'default')
+    .on('mouseenter', (event, d) => {
+      if (!d.count) return;
+      showTooltip(`
+        <div class="tt-name">${d.day === 30 ? '30+ days' : `${d.day} day${d.day !== 1 ? 's' : ''}`}</div>
+        <div class="tt-row"><span>Videos</span><span class="tt-val">${d.count.toLocaleString()}</span></div>
+      `, event);
+    })
+    .on('mousemove', moveTooltip)
+    .on('mouseleave', hideTooltip);
+
+  histData.filter(d => d.day % 5 === 0).forEach(d => {
+    g.append('text')
+      .attr('x', x(d.day) + x.bandwidth() / 2)
+      .attr('y', H + 14)
+      .attr('text-anchor', 'middle')
+      .attr('font-size', 10.5)
+      .attr('fill', '#aaa')
+      .text(d.day === 30 ? '30+' : String(d.day));
+  });
+
+  g.append('line').attr('x1', 0).attr('x2', W).attr('y1', H).attr('y2', H).attr('stroke', '#2a2a2a');
+
+  g.append('text')
+    .attr('x', W / 2).attr('y', H + 30)
+    .attr('text-anchor', 'middle')
+    .attr('font-size', 10.5).attr('fill', '#999')
+    .text('days from publish');
+
+  g.append('text')
+    .attr('x', -4).attr('y', 4)
+    .attr('text-anchor', 'end')
+    .attr('font-size', 10).attr('fill', '#888')
+    .text(maxCount.toLocaleString());
+  g.append('line').attr('x1', 0).attr('x2', 0).attr('y1', 0).attr('y2', H).attr('stroke', '#2a2a2a');
+}
 
 function escHtml(s) {
   return String(s)
