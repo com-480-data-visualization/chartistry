@@ -68,6 +68,28 @@ function moveTooltip(event) {
 }
 function hideTooltip() { tt.style.opacity = 0; }
 
+// Thumbnail validity check — rejects YouTube's 120×90 grey placeholder
+const _thumbCache = {};
+function thumbOk(videoId, cb) {
+  if (videoId in _thumbCache) { cb(_thumbCache[videoId]); return; }
+  var img = new Image();
+  var done = false;
+  var timer = setTimeout(function() {
+    if (!done) { done = true; _thumbCache[videoId] = false; cb(false); }
+  }, 3000);
+  img.onload = function() {
+    if (!done) {
+      done = true; clearTimeout(timer);
+      var ok = img.naturalWidth > 120;
+      _thumbCache[videoId] = ok; cb(ok);
+    }
+  };
+  img.onerror = function() {
+    if (!done) { done = true; clearTimeout(timer); _thumbCache[videoId] = false; cb(false); }
+  };
+  img.src = 'https://i.ytimg.com/vi/' + videoId + '/mqdefault.jpg';
+}
+
 // ISO numeric → country code (for TopoJSON)
 const ISO_NUM = {
   124:'CA',276:'DE',250:'FR',826:'GB',356:'IN',

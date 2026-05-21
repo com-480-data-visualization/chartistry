@@ -30,15 +30,20 @@ function renderFormula(data, country, category) {
 
   const allVideos = combo.top_videos || [];
   const shuffleBtn = document.getElementById('shuffle-videos-btn');
-  const doDraw = () => {
-    const shuffled = [...allVideos].sort(() => Math.random() - 0.5).slice(0, 10);
-    drawVideos(shuffled);
+  const doDraw = (restoreOpacity = false) => {
+    const grid = document.getElementById('video-grid');
+    grid.innerHTML = '<p style="color:#555;font-style:italic;padding:1rem">Loading…</p>';
+    const candidates = [...allVideos].sort(() => Math.random() - 0.5).slice(0, 30);
+    filterValidThumbs(candidates, 6, valid => {
+      drawVideos(valid.length ? valid : candidates.slice(0, 4));
+      if (restoreOpacity) grid.style.opacity = 1;
+    });
   };
   if (shuffleBtn) {
     shuffleBtn.onclick = () => {
       const grid = document.getElementById('video-grid');
       grid.style.opacity = 0;
-      setTimeout(() => { doDraw(); grid.style.opacity = 1; }, 200);
+      setTimeout(() => doDraw(true), 200);
     };
   }
   doDraw();
@@ -110,6 +115,23 @@ function drawEmojiChart(emojis) {
   });
   requestAnimationFrame(() => {
     el.querySelectorAll('.emoji-fill').forEach(bar => { bar.style.width = bar.dataset.w; });
+  });
+}
+
+function filterValidThumbs(candidates, maxCount, cb) {
+  if (!candidates.length) { cb([]); return; }
+  const results = new Array(candidates.length).fill(null);
+  let returned = false;
+  candidates.forEach((v, i) => {
+    thumbOk(v.video_id, ok => {
+      results[i] = ok;
+      if (returned) return;
+      const valid = candidates.filter((_, j) => results[j] === true);
+      if (valid.length >= maxCount || results.every(r => r !== null)) {
+        returned = true;
+        cb(valid.slice(0, maxCount));
+      }
+    });
   });
 }
 

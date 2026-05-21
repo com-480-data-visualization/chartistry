@@ -5,7 +5,7 @@ var _duelStreak   = 0;
 var _duelAnswered = false;
 var _duelPair     = null;
 var _duelAppData  = null;
-var _thumbCache   = {}; // videoId -> true/false
+// _thumbCache and thumbOk live in utils.js (shared with scene3)
 
 function initDuel(data) {
   if (_duelAppData) return;
@@ -81,28 +81,6 @@ function tryPair(attempt) {
   thumbOk(pair.b.video_id, function(ok) { results[1] = ok; onResult(); });
 }
 
-// Returns true if the thumbnail is a real image (not the 120×90 grey placeholder)
-function thumbOk(videoId, cb) {
-  if (videoId in _thumbCache) { cb(_thumbCache[videoId]); return; }
-  var img = new Image();
-  var done = false;
-  var timer = setTimeout(function() {
-    if (!done) { done = true; _thumbCache[videoId] = false; cb(false); }
-  }, 3000);
-  img.onload = function() {
-    if (!done) {
-      done = true;
-      clearTimeout(timer);
-      var ok = img.naturalWidth > 120; // grey placeholder is exactly 120×90
-      _thumbCache[videoId] = ok;
-      cb(ok);
-    }
-  };
-  img.onerror = function() {
-    if (!done) { done = true; clearTimeout(timer); _thumbCache[videoId] = false; cb(false); }
-  };
-  img.src = 'https://i.ytimg.com/vi/' + videoId + '/mqdefault.jpg';
-}
 
 function duelPick() {
   var shuffled = _duelCombos.slice().sort(function() { return Math.random() - 0.5; });
