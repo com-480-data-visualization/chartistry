@@ -15,7 +15,6 @@ function renderFormula(data, country, category) {
 
   document.getElementById('s-videos').textContent  = combo.video_count.toLocaleString();
   document.getElementById('s-views').textContent   = fmtViews(combo.avg_views);
-  document.getElementById('s-emoji').textContent   = combo.emoji_count_avg.toFixed(1);
   document.getElementById('s-caps').textContent    = fmtPct(combo.caps_ratio_avg);
   document.getElementById('s-timing').textContent  =
     combo.best_day && combo.best_hour != null
