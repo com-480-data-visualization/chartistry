@@ -310,8 +310,8 @@ function drawTimingHeatmap(heatmapData, bestDay, bestHour) {
 
   const maxVal = d3.max(heatmapData, e => e.avg_views) || 1;
 
-  // Inferno avoids the all-red look while still reading as a heat map
-  const colorScale = d3.scaleSequential([0, maxVal], d3.interpolateInferno);
+  const redScale = d3.interpolateRgbBasis(['#0d0000', '#7a1010', '#cc2222', '#ff4444', '#ffaaaa']);
+  const colorScale = d3.scaleSequential([0, maxVal], redScale);
 
   const containerW = el.clientWidth || 560;
   const cellW = Math.max(12, Math.floor((containerW - 52) / 24));
@@ -389,7 +389,7 @@ function drawTimingHeatmap(heatmapData, bestDay, bestHour) {
     .attr('id', 'timing-legend-grad')
     .attr('x1', '0%').attr('x2', '100%');
   [0, 0.25, 0.5, 0.75, 1].forEach(t => {
-    legGrad.append('stop').attr('offset', `${t * 100}%`).attr('stop-color', d3.interpolateInferno(t));
+    legGrad.append('stop').attr('offset', `${t * 100}%`).attr('stop-color', redScale(t));
   });
   svg.append('rect')
     .attr('x', legX).attr('y', legY)
