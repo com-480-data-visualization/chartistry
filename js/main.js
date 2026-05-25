@@ -37,10 +37,14 @@
   });
 
   // ── Init scenes ─────────────────────────────────────────────
-  await initScene1(appData, (code, cat) => {
-    navigateTo('scene-2');
-    preSelectCountry(code, cat);
-  });
+  try {
+    await initScene1(appData, (code, cat) => {
+      navigateTo('scene-2');
+      preSelectCountry(code, cat);
+    });
+  } catch (e) {
+    console.error('Scene 1 init failed:', e);
+  }
 
   initScene2(appData, (country, category) => {
     document.getElementById('scene-3').removeAttribute('hidden');
