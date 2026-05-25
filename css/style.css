@@ -2021,24 +2021,6 @@ body {
   color: #1c1410;
 }
 
-/* ── Formula scene: white video cards on dark background ── */
-.scene-formula .vcard {
-  background: #fff;
-  border-color: #333;
-}
-.scene-formula .vcard:hover {
-  border-color: var(--red);
-  box-shadow: 0 12px 30px rgba(0,0,0,0.5);
-}
-.scene-formula .vcard-title { color: #1c1410; }
-.scene-formula .vcard-views { color: #6b5f58; }
-.scene-formula .vcard-play-overlay span {
-  background: var(--red);
-}
-.scene-formula .video-grid.reel-mode {
-  scrollbar-color: var(--red-dim) transparent;
-}
-
 /* ── Category heatmap labels: brighter on dark background ── */
 #cat-heatmap text {
   fill: #bbb !important;
