@@ -24,7 +24,9 @@ async function initScene1(data, onCountryClick) {
   _s1data = data;
   _onCountryClick = onCountryClick;
 
-  _topo = await d3.json('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json');
+  const topoUrl = 'https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json';
+  const topoTimeout = new Promise((_, reject) => setTimeout(() => reject(new Error('topo timeout')), 8000));
+  _topo = await Promise.race([d3.json(topoUrl), topoTimeout]);
   setupMetricToggle();
 
   const pubSlider = document.getElementById('pub-hour-slider');
