@@ -1325,7 +1325,7 @@ body {
 
 /* Streak box — centered below cards */
 .duel-streak-box {
-  margin-top: 2rem;
+  margin-top: 0;
   padding: 1.25rem 3rem;
   border-radius: var(--r-lg);
   background: rgba(255, 68, 68, 0.1);
@@ -1382,12 +1382,20 @@ body {
   max-width: 860px;
 }
 
+.duel-center-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 0 0.25rem;
+}
+
 .duel-or {
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 0 0.5rem;
-  align-self: center;
   font-family: var(--fhead);
   font-size: 0.85rem;
   font-weight: 800;
@@ -1867,158 +1875,28 @@ body {
    Palette: medium-dark grey #2e2e2e · red #ff4444
 ================================================================ */
 
-.scene-selector {
-  background:
-    radial-gradient(ellipse at 88% 8%, rgba(255, 68, 68, 0.10) 0%, transparent 50%),
-    radial-gradient(ellipse at 10% 90%, rgba(255, 68, 68, 0.06) 0%, transparent 50%),
-    #2e2e2e;
-  color: #f0f0f0;
+/* ── Section separators — angled clip before scenes 2 and 4 ── */
+#scene-2,
+#scene-4 {
+  background: #1e1e1e;
 }
 
-.scene-duel {
-  background:
-    radial-gradient(ellipse at 50% 5%, rgba(255, 68, 68, 0.11) 0%, transparent 52%),
-    radial-gradient(ellipse at 85% 85%, rgba(255, 68, 68, 0.06) 0%, transparent 45%),
-    #2e2e2e;
+/* ── Formula scene: white video cards on dark background ── */
+.scene-formula .vcard {
+  background: #fff;
+  border-color: #333;
 }
-
-/* Scene separator borders */
-.scene-global + .scene-selector,
-.scene-selector + .scene-formula,
-.scene-formula + .scene-duel {
-  border-top: 1px solid rgba(255, 68, 68, 0.15);
-}
-
-/* ── Scene 2: Explore (Selector) ── */
-
-.scene-selector .scene-title { color: #f0f0f0; }
-.scene-selector .scene-sub   { color: #aaa; }
-
-.scene-selector .sel-label   { color: #aaa; }
-.scene-selector .sel-divider { color: #555; }
-
-.scene-selector .country-tile {
-  background: #3a3a3a;
-  border-color: #484848;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
-}
-.scene-selector .country-tile:hover {
-  background: #424242;
-  border-color: #555;
-}
-.scene-selector .country-tile.sel {
+.scene-formula .vcard:hover {
   border-color: var(--red);
-  background: var(--red-dim);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.5);
 }
-.scene-selector .ctile-name { color: #aaa; }
-.scene-selector .country-tile.sel .ctile-name { color: var(--red); }
-
-.scene-selector .cat-tile {
-  background: #3a3a3a;
-  border-color: #484848;
-  color: #f0f0f0;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
-}
-.scene-selector .cat-tile:hover {
-  background: #424242;
-  border-color: #555;
-}
-.scene-selector .cat-tile.sel {
-  border-color: var(--red);
-  background: var(--red-dim);
-  color: var(--red);
-}
-
-.scene-selector .selector-footer {
-  background: #3a3a3a;
-  border: 1px solid #484848;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.2);
-}
-.scene-selector .selection-preview        { color: #aaa; }
-.scene-selector .selection-preview strong { color: #f0f0f0; }
-
-.scene-selector .scene-cta      { border-top: 1px solid #484848; }
-.scene-selector .scene-cta-text { color: #aaa; }
-
-.scene-selector .btn-primary {
+.scene-formula .vcard-title { color: #1c1410; }
+.scene-formula .vcard-views { color: #6b5f58; }
+.scene-formula .vcard-play-overlay span {
   background: var(--red);
-  box-shadow: 0 4px 20px rgba(255, 68, 68, 0.28);
 }
-.scene-selector .btn-primary:hover {
-  box-shadow: 0 8px 30px rgba(255, 68, 68, 0.42);
-}
-.scene-selector .btn-primary:disabled {
-  background: #484848;
-  color: #777;
-  box-shadow: none;
-}
-
-/* ── Scene 4: Viral Duel ── */
-
-.scene-duel .scene-title { color: #f0f0f0; }
-.scene-duel .scene-sub   { color: #aaa; }
-
-.scene-duel .hero-tag {
-  background: var(--red-dim);
-  border-color: rgba(255, 68, 68, 0.25);
-  color: var(--red);
-}
-.scene-duel .duel-combo-label { color: #f0f0f0; }
-.scene-duel .duel-or          { color: #555; }
-
-.scene-duel .duel-card {
-  background: #3a3a3a;
-  border-color: #484848;
-  box-shadow: 0 2px 14px rgba(0,0,0,0.2);
-}
-.scene-duel .duel-card:hover {
-  border-color: var(--red);
-  box-shadow: 0 12px 40px rgba(255, 68, 68, 0.22);
-}
-.scene-duel .duel-card:focus-visible {
-  border-color: var(--red);
-  box-shadow: 0 0 0 3px rgba(255, 68, 68, 0.28);
-}
-.scene-duel .duel-card--winner {
-  border-color: #2d9e5f !important;
-  box-shadow: 0 8px 40px rgba(45, 158, 95, 0.2) !important;
-}
-.scene-duel .duel-card--loser  { border-color: #484848 !important; }
-.scene-duel .duel-thumb-wrap   { background: #222; }
-
-.scene-duel .duel-title  { color: #f0f0f0; }
-.scene-duel .duel-meta,
-.scene-duel .duel-channel,
-.scene-duel .duel-pub    { color: #aaa; }
-.scene-duel .duel-views  { color: #aaa; }
-.scene-duel .duel-card--winner .duel-views { color: #2d9e5f; }
-
-.scene-duel .duel-streak-box {
-  background: rgba(255, 68, 68, 0.08);
-  border: 2px solid var(--red);
-  box-shadow: 0 0 24px rgba(255, 68, 68, 0.15);
-}
-.scene-duel .duel-streak-title          { color: var(--red); }
-.scene-duel .duel-streak-count #duel-streak { color: var(--red); }
-
-.scene-duel .duel-feedback-text { color: #f0f0f0; }
-.scene-duel .fb-correct { color: #2d9e5f; }
-.scene-duel .fb-wrong   { color: var(--red); }
-
-.scene-duel .btn-primary {
-  background: var(--red);
-  box-shadow: 0 4px 20px rgba(255, 68, 68, 0.28);
-}
-.scene-duel .btn-primary:hover {
-  box-shadow: 0 8px 30px rgba(255, 68, 68, 0.42);
-}
-.scene-duel .btn-ghost {
-  border-color: #484848;
-  color: #aaa;
-}
-.scene-duel .btn-ghost:hover {
-  border-color: #666;
-  color: #f0f0f0;
+.scene-formula .video-grid.reel-mode {
+  scrollbar-color: var(--red-dim) transparent;
 }
 
 /* ── Category heatmap labels: brighter on dark background ── */

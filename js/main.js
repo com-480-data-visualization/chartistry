@@ -43,11 +43,28 @@
   });
 
   initScene2(appData, (country, category) => {
+    document.getElementById('scene-3').removeAttribute('hidden');
+    document.getElementById('nav-formula').removeAttribute('hidden');
+
     renderFormula(appData, country, category);
 
     setTimeout(() => {
       navigateTo('scene-3');
     }, 0);
+  });
+
+  document.getElementById('go-to-duel-btn').addEventListener('click', (e) => {
+    e.preventDefault();
+    document.getElementById('scene-4').removeAttribute('hidden');
+    document.getElementById('nav-duel').removeAttribute('hidden');
+    setTimeout(() => navigateTo('scene-4'), 0);
+  });
+
+  document.getElementById('go-to-explore-btn-s1').addEventListener('click', (e) => {
+    e.preventDefault();
+    document.getElementById('scene-2').removeAttribute('hidden');
+    document.getElementById('nav-explore').removeAttribute('hidden');
+    setTimeout(() => navigateTo('scene-2'), 0);
   });
 
   // Back button

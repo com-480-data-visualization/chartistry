@@ -79,7 +79,7 @@ function drawMap() {
   const redScale = d3.interpolateRgbBasis(['#0d0000', '#7a1010', '#cc2222', '#ff4444', '#ffaaaa']);
   const colorScale = d3.scaleSequential()
     .domain([0, d3.max(vals) || 1])
-    .interpolator(redScale);
+    .interpolator(d3.interpolateRgbBasis(['#0d0000', '#7a1010', '#cc2222', '#ff4444', '#ffaaaa'])); 
 
   const countries = topojson.feature(_topo, _topo.objects.countries);
   const flags = _s1data.country_flags || {};
@@ -208,10 +208,12 @@ function repaintMapFills(animate) {
     let cs;
     const redScale = d3.interpolateRgbBasis(['#0d0000', '#7a1010', '#cc2222', '#ff4444', '#ffaaaa']);
     if (_metric === 'publish_time') {
-      cs = d3.scaleSequential().domain([0, publishHourZmax()]).interpolator(redScale);
+      cs = d3.scaleSequential().domain([0, publishHourZmax()])
+        .interpolator(d3.interpolateRgbBasis(['#0d0000', '#7a1010', '#cc2222', '#ff4444', '#ffaaaa']));
     } else {
       const vals = _s1data.countries.map(c => metricVal(c)).filter(Boolean);
-      cs = d3.scaleSequential().domain([0, d3.max(vals) || 1]).interpolator(redScale);
+      cs = d3.scaleSequential().domain([0, d3.max(vals) || 1])
+        .interpolator(d3.interpolateRgbBasis(['#0d0000', '#7a1010', '#cc2222', '#ff4444', '#ffaaaa']));
     }
     const sel = d3.selectAll('.has-data');
     const fillFn = (d) => {
@@ -246,7 +248,8 @@ function setupMetricToggle() {
       const leg = document.getElementById('map-legend');
       if (leg) {
         leg.querySelector('span:last-child').textContent = metricLabel();
-        leg.querySelector('.leg-grad').style.background = '';
+        // Force legend gradient update
+        leg.querySelector('.leg-grad').style.background = 'linear-gradient(to right, #0d0000, #7a1010, #cc2222, #ff4444, #ffaaaa)';
       }
       syncMapMetricDefinition();
     });
