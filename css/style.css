@@ -387,7 +387,7 @@ body {
   width: 100px;
   height: 7px;
   border-radius: 4px;
-  background: linear-gradient(to right, #140707, #660a0a, #c81010, #ff3300, #ff0000);
+  background: linear-gradient(to right, #0d0000, #7a1010, #cc2222, #ff4444, #ffaaaa);
 }
 
 /* Heatmap */
@@ -1863,162 +1863,162 @@ body {
 }
 
 /* ================================================================
-   LIGHT MODE — Scene 2 (Explore) & Scene 4 (Viral Duel)
-   Palette: warm white #fdf8f4 · orange-coral #f0622a
+   GREY MODE — Scene 2 (Explore) & Scene 4 (Viral Duel)
+   Palette: medium-dark grey #2e2e2e · red #ff4444
 ================================================================ */
 
 .scene-selector {
   background:
-    radial-gradient(ellipse at 88% 8%, rgba(240, 98, 42, 0.10) 0%, transparent 50%),
-    radial-gradient(ellipse at 10% 90%, rgba(240, 98, 42, 0.06) 0%, transparent 50%),
-    #fdf8f4;
-  color: #1c1410;
+    radial-gradient(ellipse at 88% 8%, rgba(255, 68, 68, 0.10) 0%, transparent 50%),
+    radial-gradient(ellipse at 10% 90%, rgba(255, 68, 68, 0.06) 0%, transparent 50%),
+    #2e2e2e;
+  color: #f0f0f0;
 }
 
 .scene-duel {
   background:
-    radial-gradient(ellipse at 50% 5%, rgba(240, 98, 42, 0.12) 0%, transparent 52%),
-    radial-gradient(ellipse at 85% 85%, rgba(240, 98, 42, 0.07) 0%, transparent 45%),
-    #fdf8f4;
+    radial-gradient(ellipse at 50% 5%, rgba(255, 68, 68, 0.11) 0%, transparent 52%),
+    radial-gradient(ellipse at 85% 85%, rgba(255, 68, 68, 0.06) 0%, transparent 45%),
+    #2e2e2e;
 }
 
-/* Scene separator borders — orange tint where dark meets light */
+/* Scene separator borders */
 .scene-global + .scene-selector,
 .scene-selector + .scene-formula,
 .scene-formula + .scene-duel {
-  border-top: 1px solid rgba(240, 98, 42, 0.18);
+  border-top: 1px solid rgba(255, 68, 68, 0.15);
 }
 
 /* ── Scene 2: Explore (Selector) ── */
 
-.scene-selector .scene-title { color: #1c1410; }
-.scene-selector .scene-sub   { color: #7a6455; }
+.scene-selector .scene-title { color: #f0f0f0; }
+.scene-selector .scene-sub   { color: #aaa; }
 
-.scene-selector .sel-label   { color: #7a6455; }
-.scene-selector .sel-divider { color: #d4bfb5; }
+.scene-selector .sel-label   { color: #aaa; }
+.scene-selector .sel-divider { color: #555; }
 
 .scene-selector .country-tile {
-  background: #fff;
-  border-color: #e4d5c8;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+  background: #3a3a3a;
+  border-color: #484848;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
 }
 .scene-selector .country-tile:hover {
-  background: #f7ede5;
-  border-color: #d4bfb5;
+  background: #424242;
+  border-color: #555;
 }
 .scene-selector .country-tile.sel {
-  border-color: #f0622a;
-  background: rgba(240, 98, 42, 0.08);
+  border-color: var(--red);
+  background: var(--red-dim);
 }
-.scene-selector .ctile-name { color: #7a6455; }
-.scene-selector .country-tile.sel .ctile-name { color: #f0622a; }
+.scene-selector .ctile-name { color: #aaa; }
+.scene-selector .country-tile.sel .ctile-name { color: var(--red); }
 
 .scene-selector .cat-tile {
-  background: #fff;
-  border-color: #e4d5c8;
-  color: #1c1410;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+  background: #3a3a3a;
+  border-color: #484848;
+  color: #f0f0f0;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
 }
 .scene-selector .cat-tile:hover {
-  background: #f7ede5;
-  border-color: #d4bfb5;
+  background: #424242;
+  border-color: #555;
 }
 .scene-selector .cat-tile.sel {
-  border-color: #f0622a;
-  background: rgba(240, 98, 42, 0.08);
-  color: #f0622a;
+  border-color: var(--red);
+  background: var(--red-dim);
+  color: var(--red);
 }
 
 .scene-selector .selector-footer {
-  background: #fff;
-  border: 1px solid #e4d5c8;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  background: #3a3a3a;
+  border: 1px solid #484848;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.2);
 }
-.scene-selector .selection-preview       { color: #7a6455; }
-.scene-selector .selection-preview strong { color: #1c1410; }
+.scene-selector .selection-preview        { color: #aaa; }
+.scene-selector .selection-preview strong { color: #f0f0f0; }
 
-.scene-selector .scene-cta      { border-top: 1px solid #e4d5c8; }
-.scene-selector .scene-cta-text { color: #7a6455; }
+.scene-selector .scene-cta      { border-top: 1px solid #484848; }
+.scene-selector .scene-cta-text { color: #aaa; }
 
 .scene-selector .btn-primary {
-  background: #f0622a;
-  box-shadow: 0 4px 20px rgba(240, 98, 42, 0.28);
+  background: var(--red);
+  box-shadow: 0 4px 20px rgba(255, 68, 68, 0.28);
 }
 .scene-selector .btn-primary:hover {
-  box-shadow: 0 8px 30px rgba(240, 98, 42, 0.42);
+  box-shadow: 0 8px 30px rgba(255, 68, 68, 0.42);
 }
 .scene-selector .btn-primary:disabled {
-  background: #e4d5c8;
-  color: #b5a094;
+  background: #484848;
+  color: #777;
   box-shadow: none;
 }
 
 /* ── Scene 4: Viral Duel ── */
 
-.scene-duel .scene-title { color: #1c1410; }
-.scene-duel .scene-sub   { color: #7a6455; }
+.scene-duel .scene-title { color: #f0f0f0; }
+.scene-duel .scene-sub   { color: #aaa; }
 
 .scene-duel .hero-tag {
-  background: rgba(240, 98, 42, 0.10);
-  border-color: rgba(240, 98, 42, 0.25);
-  color: #f0622a;
+  background: var(--red-dim);
+  border-color: rgba(255, 68, 68, 0.25);
+  color: var(--red);
 }
-.scene-duel .duel-combo-label { color: #1c1410; }
-.scene-duel .duel-or          { color: #c5b0a4; }
+.scene-duel .duel-combo-label { color: #f0f0f0; }
+.scene-duel .duel-or          { color: #555; }
 
 .scene-duel .duel-card {
-  background: #fff;
-  border-color: #e4d5c8;
-  box-shadow: 0 2px 14px rgba(0,0,0,0.07);
+  background: #3a3a3a;
+  border-color: #484848;
+  box-shadow: 0 2px 14px rgba(0,0,0,0.2);
 }
 .scene-duel .duel-card:hover {
-  border-color: #f0622a;
-  box-shadow: 0 12px 40px rgba(240, 98, 42, 0.18);
+  border-color: var(--red);
+  box-shadow: 0 12px 40px rgba(255, 68, 68, 0.22);
 }
 .scene-duel .duel-card:focus-visible {
-  border-color: #f0622a;
-  box-shadow: 0 0 0 3px rgba(240, 98, 42, 0.28);
+  border-color: var(--red);
+  box-shadow: 0 0 0 3px rgba(255, 68, 68, 0.28);
 }
 .scene-duel .duel-card--winner {
   border-color: #2d9e5f !important;
   box-shadow: 0 8px 40px rgba(45, 158, 95, 0.2) !important;
 }
-.scene-duel .duel-card--loser  { border-color: #e4d5c8 !important; }
-.scene-duel .duel-thumb-wrap   { background: #ede0d4; }
+.scene-duel .duel-card--loser  { border-color: #484848 !important; }
+.scene-duel .duel-thumb-wrap   { background: #222; }
 
-.scene-duel .duel-title  { color: #1c1410; }
+.scene-duel .duel-title  { color: #f0f0f0; }
 .scene-duel .duel-meta,
 .scene-duel .duel-channel,
-.scene-duel .duel-pub    { color: #7a6455; }
-.scene-duel .duel-views  { color: #7a6455; }
+.scene-duel .duel-pub    { color: #aaa; }
+.scene-duel .duel-views  { color: #aaa; }
 .scene-duel .duel-card--winner .duel-views { color: #2d9e5f; }
 
 .scene-duel .duel-streak-box {
-  background: rgba(240, 98, 42, 0.07);
-  border: 2px solid #f0622a;
-  box-shadow: 0 0 24px rgba(240, 98, 42, 0.12);
+  background: rgba(255, 68, 68, 0.08);
+  border: 2px solid var(--red);
+  box-shadow: 0 0 24px rgba(255, 68, 68, 0.15);
 }
-.scene-duel .duel-streak-title          { color: #f0622a; }
-.scene-duel .duel-streak-count #duel-streak { color: #f0622a; }
+.scene-duel .duel-streak-title          { color: var(--red); }
+.scene-duel .duel-streak-count #duel-streak { color: var(--red); }
 
-.scene-duel .duel-feedback-text { color: #1c1410; }
+.scene-duel .duel-feedback-text { color: #f0f0f0; }
 .scene-duel .fb-correct { color: #2d9e5f; }
-.scene-duel .fb-wrong   { color: #f0622a; }
+.scene-duel .fb-wrong   { color: var(--red); }
 
 .scene-duel .btn-primary {
-  background: #f0622a;
-  box-shadow: 0 4px 20px rgba(240, 98, 42, 0.28);
+  background: var(--red);
+  box-shadow: 0 4px 20px rgba(255, 68, 68, 0.28);
 }
 .scene-duel .btn-primary:hover {
-  box-shadow: 0 8px 30px rgba(240, 98, 42, 0.42);
+  box-shadow: 0 8px 30px rgba(255, 68, 68, 0.42);
 }
 .scene-duel .btn-ghost {
-  border-color: #e4d5c8;
-  color: #7a6455;
+  border-color: #484848;
+  color: #aaa;
 }
 .scene-duel .btn-ghost:hover {
-  border-color: #d4bfb5;
-  color: #1c1410;
+  border-color: #666;
+  color: #f0f0f0;
 }
 
 /* ── Category heatmap labels: brighter on dark background ── */
