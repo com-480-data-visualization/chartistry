@@ -14,7 +14,7 @@
   <script src="https://d3js.org/d3.v7.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/topojson-client@3/dist/topojson-client.min.js"></script>
   <script src="https://cdn.jsdelivr.net/gh/jasondavies/d3-cloud/build/d3.layout.cloud.js"></script>
-  <link rel="stylesheet" href="css/style.css?v=10">
+  <link rel="stylesheet" href="css/style.css?v=14">
 </head>
 
 <body>
@@ -24,9 +24,9 @@
     <div class="nav-logo">📊 Chartistry</div>
     <div class="nav-links">
       <a href="#scene-1" class="nav-link" data-scene="1">Global</a>
-      <a href="#scene-2" class="nav-link" data-scene="2">Explore</a>
-      <a href="#scene-3" class="nav-link" id="nav-formula" data-scene="3">The Formula</a>
-      <a href="#scene-4" class="nav-link" data-scene="4">Viral Duel</a>
+      <a href="#scene-2" class="nav-link" id="nav-explore" data-scene="2" hidden>Explore</a>
+      <a href="#scene-3" class="nav-link" id="nav-formula" data-scene="3" hidden>The Formula</a>
+      <a href="#scene-4" class="nav-link" id="nav-duel" data-scene="4" hidden>Viral Duel</a>
     </div>
   </nav>
 
@@ -75,12 +75,12 @@
     </div>
     <div class="scene-cta">
       <span class="scene-cta-text">Ready to zoom into a specific niche?</span>
-      <a href="#scene-2" class="btn-primary btn-sm">Choose Your Lens →</a>
+      <a href="#scene-2" class="btn-primary btn-sm" id="go-to-explore-btn-s1">Choose Your Lens →</a>
     </div>
   </section>
 
   <!-- SCENE 2: SELECTOR -->
-  <section id="scene-2" class="scene scene-selector">
+  <section id="scene-2" class="scene scene-selector" hidden>
     <div class="scene-header">
       <h2 class="scene-title">Choose Your Lens</h2>
       <p class="scene-sub">Pick a country and a content category to decode the formula for virality in that niche.</p>
@@ -103,7 +103,7 @@
   </section>
 
   <!-- SCENE 3: FORMULA -->
-  <section id="scene-3" class="scene scene-formula">
+  <section id="scene-3" class="scene scene-formula" hidden>
     <div class="formula-header">
       <div>
         <div class="formula-tag">The Formula</div>
@@ -201,7 +201,7 @@
   </section>
 
   <!-- SCENE 4: VIRAL DUEL -->
-  <section id="scene-4" class="scene scene-duel">
+  <section id="scene-4" class="scene scene-duel" hidden>
     <div class="scene-header">
       <div class="hero-tag">Mini Game</div>
       <h2 class="scene-title">Viral Duel</h2>
@@ -212,21 +212,21 @@
 
     <div class="duel-cards" id="duel-cards">
       <div class="duel-card" id="duel-card-a" role="button" tabindex="0"></div>
-      <div class="duel-or">OR</div>
-      <div class="duel-card" id="duel-card-b" role="button" tabindex="0"></div>
-    </div>
-
-    <div class="duel-streak-box">
-      <div class="duel-streak-title">Streak</div>
-      <div class="duel-streak-count">
-        <span id="duel-streak">0</span>
-        <span class="duel-streak-fire">🔥</span>
+      <div class="duel-center-col">
+        <div class="duel-or" id="duel-or">OR</div>
+        <div class="duel-streak-box">
+          <div class="duel-streak-title">Streak</div>
+          <div class="duel-streak-count">
+            <span id="duel-streak">0</span>
+            <span class="duel-streak-fire">🔥</span>
+          </div>
+        </div>
+        <div class="duel-feedback" id="duel-feedback">
+          <p class="duel-feedback-text" id="duel-feedback-text"></p>
+          <button class="btn-primary" id="duel-next-btn">Next Duel →</button>
+        </div>
       </div>
-    </div>
-
-    <div class="duel-feedback" id="duel-feedback">
-      <p class="duel-feedback-text" id="duel-feedback-text"></p>
-      <button class="btn-primary" id="duel-next-btn">Next Duel →</button>
+      <div class="duel-card" id="duel-card-b" role="button" tabindex="0"></div>
     </div>
   </section>
 

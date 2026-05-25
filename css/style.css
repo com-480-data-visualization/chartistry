@@ -387,7 +387,7 @@ body {
   width: 100px;
   height: 7px;
   border-radius: 4px;
-  background: linear-gradient(to right, #140707, #660a0a, #c81010, #ff3300, #ff0000);
+  background: linear-gradient(to right, #0d0000, #7a1010, #cc2222, #ff4444, #ffaaaa);
 }
 
 /* Heatmap */
@@ -1325,7 +1325,7 @@ body {
 
 /* Streak box — centered below cards */
 .duel-streak-box {
-  margin-top: 2rem;
+  margin-top: 0;
   padding: 1.25rem 3rem;
   border-radius: var(--r-lg);
   background: rgba(255, 68, 68, 0.1);
@@ -1382,12 +1382,20 @@ body {
   max-width: 860px;
 }
 
+.duel-center-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 0 0.25rem;
+}
+
 .duel-or {
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 0 0.5rem;
-  align-self: center;
   font-family: var(--fhead);
   font-size: 0.85rem;
   font-weight: 800;
@@ -1867,158 +1875,10 @@ body {
    Palette: warm white #fdf8f4 · orange-coral #f0622a
 ================================================================ */
 
-.scene-selector {
-  background:
-    radial-gradient(ellipse at 88% 8%, rgba(240, 98, 42, 0.10) 0%, transparent 50%),
-    radial-gradient(ellipse at 10% 90%, rgba(240, 98, 42, 0.06) 0%, transparent 50%),
-    #fdf8f4;
-  color: #1c1410;
-}
-
-.scene-duel {
-  background:
-    radial-gradient(ellipse at 50% 5%, rgba(240, 98, 42, 0.12) 0%, transparent 52%),
-    radial-gradient(ellipse at 85% 85%, rgba(240, 98, 42, 0.07) 0%, transparent 45%),
-    #fdf8f4;
-}
-
-/* Scene separator borders — orange tint where dark meets light */
-.scene-global + .scene-selector,
-.scene-selector + .scene-formula,
-.scene-formula + .scene-duel {
-  border-top: 1px solid rgba(240, 98, 42, 0.18);
-}
-
-/* ── Scene 2: Explore (Selector) ── */
-
-.scene-selector .scene-title { color: #1c1410; }
-.scene-selector .scene-sub   { color: #7a6455; }
-
-.scene-selector .sel-label   { color: #7a6455; }
-.scene-selector .sel-divider { color: #d4bfb5; }
-
-.scene-selector .country-tile {
-  background: #fff;
-  border-color: #e4d5c8;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
-}
-.scene-selector .country-tile:hover {
-  background: #f7ede5;
-  border-color: #d4bfb5;
-}
-.scene-selector .country-tile.sel {
-  border-color: #f0622a;
-  background: rgba(240, 98, 42, 0.08);
-}
-.scene-selector .ctile-name { color: #7a6455; }
-.scene-selector .country-tile.sel .ctile-name { color: #f0622a; }
-
-.scene-selector .cat-tile {
-  background: #fff;
-  border-color: #e4d5c8;
-  color: #1c1410;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
-}
-.scene-selector .cat-tile:hover {
-  background: #f7ede5;
-  border-color: #d4bfb5;
-}
-.scene-selector .cat-tile.sel {
-  border-color: #f0622a;
-  background: rgba(240, 98, 42, 0.08);
-  color: #f0622a;
-}
-
-.scene-selector .selector-footer {
-  background: #fff;
-  border: 1px solid #e4d5c8;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
-}
-.scene-selector .selection-preview       { color: #7a6455; }
-.scene-selector .selection-preview strong { color: #1c1410; }
-
-.scene-selector .scene-cta      { border-top: 1px solid #e4d5c8; }
-.scene-selector .scene-cta-text { color: #7a6455; }
-
-.scene-selector .btn-primary {
-  background: #f0622a;
-  box-shadow: 0 4px 20px rgba(240, 98, 42, 0.28);
-}
-.scene-selector .btn-primary:hover {
-  box-shadow: 0 8px 30px rgba(240, 98, 42, 0.42);
-}
-.scene-selector .btn-primary:disabled {
-  background: #e4d5c8;
-  color: #b5a094;
-  box-shadow: none;
-}
-
-/* ── Scene 4: Viral Duel ── */
-
-.scene-duel .scene-title { color: #1c1410; }
-.scene-duel .scene-sub   { color: #7a6455; }
-
-.scene-duel .hero-tag {
-  background: rgba(240, 98, 42, 0.10);
-  border-color: rgba(240, 98, 42, 0.25);
-  color: #f0622a;
-}
-.scene-duel .duel-combo-label { color: #1c1410; }
-.scene-duel .duel-or          { color: #c5b0a4; }
-
-.scene-duel .duel-card {
-  background: #fff;
-  border-color: #e4d5c8;
-  box-shadow: 0 2px 14px rgba(0,0,0,0.07);
-}
-.scene-duel .duel-card:hover {
-  border-color: #f0622a;
-  box-shadow: 0 12px 40px rgba(240, 98, 42, 0.18);
-}
-.scene-duel .duel-card:focus-visible {
-  border-color: #f0622a;
-  box-shadow: 0 0 0 3px rgba(240, 98, 42, 0.28);
-}
-.scene-duel .duel-card--winner {
-  border-color: #2d9e5f !important;
-  box-shadow: 0 8px 40px rgba(45, 158, 95, 0.2) !important;
-}
-.scene-duel .duel-card--loser  { border-color: #e4d5c8 !important; }
-.scene-duel .duel-thumb-wrap   { background: #ede0d4; }
-
-.scene-duel .duel-title  { color: #1c1410; }
-.scene-duel .duel-meta,
-.scene-duel .duel-channel,
-.scene-duel .duel-pub    { color: #7a6455; }
-.scene-duel .duel-views  { color: #7a6455; }
-.scene-duel .duel-card--winner .duel-views { color: #2d9e5f; }
-
-.scene-duel .duel-streak-box {
-  background: rgba(240, 98, 42, 0.07);
-  border: 2px solid #f0622a;
-  box-shadow: 0 0 24px rgba(240, 98, 42, 0.12);
-}
-.scene-duel .duel-streak-title          { color: #f0622a; }
-.scene-duel .duel-streak-count #duel-streak { color: #f0622a; }
-
-.scene-duel .duel-feedback-text { color: #1c1410; }
-.scene-duel .fb-correct { color: #2d9e5f; }
-.scene-duel .fb-wrong   { color: #f0622a; }
-
-.scene-duel .btn-primary {
-  background: #f0622a;
-  box-shadow: 0 4px 20px rgba(240, 98, 42, 0.28);
-}
-.scene-duel .btn-primary:hover {
-  box-shadow: 0 8px 30px rgba(240, 98, 42, 0.42);
-}
-.scene-duel .btn-ghost {
-  border-color: #e4d5c8;
-  color: #7a6455;
-}
-.scene-duel .btn-ghost:hover {
-  border-color: #d4bfb5;
-  color: #1c1410;
+/* ── Section separators — angled clip before scenes 2 and 4 ── */
+#scene-2,
+#scene-4 {
+  background: #1e1e1e;
 }
 
 /* ── Formula scene: white video cards on dark background ── */

@@ -52,6 +52,7 @@ function duelNext() {
   document.getElementById('duel-combo-label').textContent = 'Finding a matchup…';
   document.getElementById('duel-card-a').innerHTML = '';
   document.getElementById('duel-card-b').innerHTML = '';
+  document.getElementById('duel-cards').scrollIntoView({ behavior: 'smooth', block: 'center' });
   tryPair(0);
 }
 
