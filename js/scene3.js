@@ -310,7 +310,7 @@ function drawTimingHeatmap(heatmapData, bestDay, bestHour) {
 
   const maxVal = d3.max(heatmapData, e => e.avg_views) || 1;
 
-  const redScale = d3.interpolateRgbBasis(['#0d0000', '#7a1010', '#cc2222', '#ff4444', '#ffaaaa']);
+  const redScale = d3.interpolateRgbBasis(['#5c0a0a', '#7a1010', '#cc2222', '#ff4444', '#ffaaaa']);
   const colorScale = d3.scaleSequential([0, maxVal], redScale);
 
   const containerW = el.clientWidth || 560;
@@ -355,17 +355,21 @@ function drawTimingHeatmap(heatmapData, bestDay, bestHour) {
         .attr('width', cellW - 2)
         .attr('height', cellH - 2)
         .attr('rx', 2)
-        .attr('fill', hasData ? colorScale(val) : '#111')
-        .style('cursor', hasData ? 'pointer' : 'default')
-        .on('mouseenter', hasData ? (event) => {
+        .attr('fill', hasData ? colorScale(val) : '#555')
+        .style('cursor', 'default')
+        .on('mouseenter', (event) => {
+          if (!hasData) {
+            showTooltip(`<div class="tt-name" style="color:#aaa">No data</div>`, event);
+            return;
+          }
           showTooltip(`
             <div class="tt-name">${day}, ${h}:00 UTC</div>
             <div class="tt-row"><span>Avg Views</span><span class="tt-val">${fmtViews(val)}</span></div>
             ${isBest ? '<div style="color:#fcd34d;font-size:0.72rem;margin-top:0.3rem">★ Best window</div>' : ''}
           `, event);
-        } : null)
-        .on('mousemove', hasData ? moveTooltip : null)
-        .on('mouseleave', hasData ? hideTooltip : null);
+        })
+        .on('mousemove', moveTooltip)
+        .on('mouseleave', hideTooltip);
 
       if (isBest) {
         svg.append('rect')

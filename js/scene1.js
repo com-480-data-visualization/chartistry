@@ -78,10 +78,10 @@ function drawMap() {
 
   const byCountry = _s1data.global.by_country;
   const vals = Object.values(byCountry).map(d => d.avg_views).filter(Boolean);
-  const redScale = d3.interpolateRgbBasis(['#0d0000', '#7a1010', '#cc2222', '#ff4444', '#ffaaaa']);
+  const redScale = d3.interpolateRgbBasis(['#5c0a0a', '#7a1010', '#cc2222', '#ff4444', '#ffaaaa']);
   const colorScale = d3.scaleSequential()
     .domain([0, d3.max(vals) || 1])
-    .interpolator(d3.interpolateRgbBasis(['#0d0000', '#7a1010', '#cc2222', '#ff4444', '#ffaaaa'])); 
+    .interpolator(d3.interpolateRgbBasis(['#5c0a0a', '#7a1010', '#cc2222', '#ff4444', '#ffaaaa'])); 
 
   const countries = topojson.feature(_topo, _topo.objects.countries);
   const flags = _s1data.country_flags || {};
@@ -112,11 +112,7 @@ function drawMap() {
       if (code && byCountry[code] && _onCountryClick) _onCountryClick(code);
     });
 
-  // Legend
-  document.getElementById('map-legend').innerHTML = `
-    <span>Low</span><div class="leg-grad"></div><span>High</span>
-    <span style="margin-left:auto;color:#555">${metricLabel()}</span>
-  `;
+  renderMapLegend();
   syncMapMetricDefinition();
   const pubPanel = document.getElementById('pub-hour-panel');
   if (pubPanel) pubPanel.hidden = _metric !== 'publish_time';
@@ -178,6 +174,25 @@ function metricLabel() {
   }[_metric];
 }
 
+function metricLegendLabels() {
+  return {
+    avg_views:    { low: 'Fewer views',  high: 'Most views'   },
+    video_count:  { low: 'Fewer videos', high: 'Most videos'  },
+    engagement:   { low: 'Less engaged', high: 'Most engaged' },
+    publish_time: { low: 'Rare hour',    high: 'Peak hour'    },
+  }[_metric] || { low: 'Low', high: 'High' };
+}
+
+function renderMapLegend() {
+  const leg = document.getElementById('map-legend');
+  if (!leg) return;
+  const { low, high } = metricLegendLabels();
+  leg.innerHTML = `
+    <span>${low}</span><div class="leg-grad"></div><span>${high}</span>
+    <span style="margin-left:auto;color:#888">${metricLabel()}</span>
+  `;
+}
+
 /** Shown under the map legend so the engagement definition is explicit. */
 function metricDefinitionText() {
   if (_metric === 'engagement') {
@@ -208,14 +223,14 @@ function syncMapMetricDefinition() {
 function repaintMapFills(animate) {
   const apply = () => {
     let cs;
-    const redScale = d3.interpolateRgbBasis(['#0d0000', '#7a1010', '#cc2222', '#ff4444', '#ffaaaa']);
+    const redScale = d3.interpolateRgbBasis(['#5c0a0a', '#7a1010', '#cc2222', '#ff4444', '#ffaaaa']);
     if (_metric === 'publish_time') {
       cs = d3.scaleSequential().domain([0, publishHourZmax()])
-        .interpolator(d3.interpolateRgbBasis(['#0d0000', '#7a1010', '#cc2222', '#ff4444', '#ffaaaa']));
+        .interpolator(d3.interpolateRgbBasis(['#5c0a0a', '#7a1010', '#cc2222', '#ff4444', '#ffaaaa']));
     } else {
       const vals = _s1data.countries.map(c => metricVal(c)).filter(Boolean);
       cs = d3.scaleSequential().domain([0, d3.max(vals) || 1])
-        .interpolator(d3.interpolateRgbBasis(['#0d0000', '#7a1010', '#cc2222', '#ff4444', '#ffaaaa']));
+        .interpolator(d3.interpolateRgbBasis(['#5c0a0a', '#7a1010', '#cc2222', '#ff4444', '#ffaaaa']));
     }
     const sel = d3.selectAll('.has-data');
     const fillFn = (d) => {
@@ -247,12 +262,7 @@ function setupMetricToggle() {
         if (v) v.textContent = String(_pubHour);
       }
       repaintMapFills(true);
-      const leg = document.getElementById('map-legend');
-      if (leg) {
-        leg.querySelector('span:last-child').textContent = metricLabel();
-        // Force legend gradient update
-        leg.querySelector('.leg-grad').style.background = 'linear-gradient(to right, #0d0000, #7a1010, #cc2222, #ff4444, #ffaaaa)';
-      }
+      renderMapLegend();
       syncMapMetricDefinition();
     });
   });
@@ -284,7 +294,7 @@ function drawCatHeatmap() {
   }));
   const cs = d3.scaleSequential()
     .domain([0, d3.quantile(pcts.sort(d3.ascending), 0.95) || 1])
-    .interpolator(d3.interpolateRgbBasis(['#0d0000', '#7a1010', '#cc2222', '#ff4444', '#ffaaaa']));
+    .interpolator(d3.interpolateRgbBasis(['#5c0a0a', '#7a1010', '#cc2222', '#ff4444', '#ffaaaa']));
 
   // Country headers (flags)
   svg.selectAll('.hm-ch').data(countries).join('text')
@@ -317,11 +327,14 @@ function drawCatHeatmap() {
 
       cell.append('rect')
         .attr('width', cellW - 1).attr('height', cellH - 1).attr('rx', 2)
-        .attr('fill', pct > 0 ? cs(pct) : '#111')
+        .attr('fill', pct > 0 ? cs(pct) : '#555')
         .attr('stroke', 'transparent').attr('stroke-width', '1');
 
       cell.on('mouseenter', event => {
-        if (!pct) return;
+        if (!pct) {
+          showTooltip(`<div class="tt-name" style="color:#aaa">No data</div>`, event);
+          return;
+        }
         showTooltip(`
           <div class="tt-name">${flags[code] || code} × ${cat}</div>
           <div class="tt-row"><span>Share</span><span class="tt-val">${pct.toFixed(1)}%</span></div>

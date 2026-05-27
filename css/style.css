@@ -321,8 +321,8 @@ body {
 }
 
 .cpath {
-  stroke: #2a2a2a;
-  stroke-width: 0.5;
+  stroke: rgba(255, 255, 255, 0.25);
+  stroke-width: 1.2;
 }
 
 .cpath.has-data {
@@ -387,7 +387,7 @@ body {
   width: 100px;
   height: 7px;
   border-radius: 4px;
-  background: linear-gradient(to right, #0d0000, #7a1010, #cc2222, #ff4444, #ffaaaa);
+  background: linear-gradient(to right, #5c0a0a, #7a1010, #cc2222, #ff4444, #ffaaaa);
 }
 
 /* Heatmap */
