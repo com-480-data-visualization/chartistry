@@ -401,6 +401,22 @@ function drawTimingHeatmap(heatmapData, bestDay, bestHour) {
     .attr('rx', 3)
     .attr('fill', 'url(#timing-legend-grad)')
     .attr('stroke', '#333').attr('stroke-width', 0.5);
+
+  // SVG N/A Legend
+  const naX = legX - 44;
+  svg.append('rect')
+    .attr('x', naX).attr('y', legY)
+    .attr('width', 8).attr('height', 8)
+    .attr('rx', 2)
+    .attr('fill', '#555')
+    .attr('stroke', 'rgba(255, 255, 255, 0.15)').attr('stroke-width', 0.5);
+
+  svg.append('text')
+    .attr('x', naX + 13).attr('y', legY + 4.5)
+    .attr('font-size', 9.5).attr('fill', '#999')
+    .attr('dominant-baseline', 'middle')
+    .text('N/A');
+
   svg.append('text').attr('x', legX).attr('y', legY + legH + 11)
     .attr('font-size', 10).attr('fill', '#999').text('fewer views');
   svg.append('text').attr('x', legX + legW).attr('y', legY + legH + 11)

@@ -188,8 +188,29 @@ function renderMapLegend() {
   if (!leg) return;
   const { low, high } = metricLegendLabels();
   leg.innerHTML = `
-    <span>${low}</span><div class="leg-grad"></div><span>${high}</span>
+    <div class="leg-scale">
+      <span>${low}</span>
+      <div class="leg-grad"></div>
+      <span>${high}</span>
+    </div>
     <span style="margin-left:auto;color:#888">${metricLabel()}</span>
+  `;
+}
+
+function renderHeatmapLegend() {
+  const leg = document.getElementById('heatmap-legend');
+  if (!leg) return;
+  leg.innerHTML = `
+    <div class="leg-scale">
+      <span>Lower mix</span>
+      <div class="leg-grad"></div>
+      <span>Higher mix</span>
+    </div>
+    <div class="leg-na">
+      <span class="leg-na-box"></span>
+      <span>N/A</span>
+    </div>
+    <span style="margin-left:auto;color:#888">Category Share</span>
   `;
 }
 
@@ -347,4 +368,5 @@ function drawCatHeatmap() {
         .on('click', () => { if (pct && _onCountryClick) _onCountryClick(code, cat); });
     });
   });
+  renderHeatmapLegend();
 }

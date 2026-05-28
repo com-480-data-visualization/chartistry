@@ -334,13 +334,36 @@ body {
   stroke-width: 1.5;
 }
 
-.map-legend {
+.map-legend,
+.heatmap-legend {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+  margin-top: 0.8rem;
+  font-size: 0.72rem;
+  color: var(--muted);
+}
+
+.leg-scale {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  margin-top: 0.6rem;
-  font-size: 0.72rem;
-  color: var(--muted);
+}
+
+.leg-na {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.leg-na-box {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  background: #555;
+  border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 .map-metric-def {
@@ -387,7 +410,7 @@ body {
   width: 100px;
   height: 7px;
   border-radius: 4px;
-  background: linear-gradient(to right, #5c0a0a, #7a1010, #cc2222, #ff4444, #ffaaaa);
+  background: linear-gradient(to right, #0d0000, #7a1010, #cc2222, #ff4444, #ffaaaa);
 }
 
 /* Heatmap */
