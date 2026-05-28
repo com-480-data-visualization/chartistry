@@ -78,10 +78,10 @@ function drawMap() {
 
   const byCountry = _s1data.global.by_country;
   const vals = Object.values(byCountry).map(d => d.avg_views).filter(Boolean);
-  const redScale = d3.interpolateRgbBasis(['#5c0a0a', '#7a1010', '#cc2222', '#ff4444', '#ffaaaa']);
+  const redScale = d3.interpolateRgbBasis(['#0d0000', '#7a1010', '#cc2222', '#ff4444', '#ffaaaa']);
   const colorScale = d3.scaleSequential()
     .domain([0, d3.max(vals) || 1])
-    .interpolator(d3.interpolateRgbBasis(['#5c0a0a', '#7a1010', '#cc2222', '#ff4444', '#ffaaaa'])); 
+    .interpolator(d3.interpolateRgbBasis(['#0d0000', '#7a1010', '#cc2222', '#ff4444', '#ffaaaa'])); 
 
   const countries = topojson.feature(_topo, _topo.objects.countries);
   const flags = _s1data.country_flags || {};
@@ -223,14 +223,14 @@ function syncMapMetricDefinition() {
 function repaintMapFills(animate) {
   const apply = () => {
     let cs;
-    const redScale = d3.interpolateRgbBasis(['#5c0a0a', '#7a1010', '#cc2222', '#ff4444', '#ffaaaa']);
+    const redScale = d3.interpolateRgbBasis(['#0d0000', '#7a1010', '#cc2222', '#ff4444', '#ffaaaa']);
     if (_metric === 'publish_time') {
       cs = d3.scaleSequential().domain([0, publishHourZmax()])
-        .interpolator(d3.interpolateRgbBasis(['#5c0a0a', '#7a1010', '#cc2222', '#ff4444', '#ffaaaa']));
+        .interpolator(d3.interpolateRgbBasis(['#0d0000', '#7a1010', '#cc2222', '#ff4444', '#ffaaaa']));
     } else {
       const vals = _s1data.countries.map(c => metricVal(c)).filter(Boolean);
       cs = d3.scaleSequential().domain([0, d3.max(vals) || 1])
-        .interpolator(d3.interpolateRgbBasis(['#5c0a0a', '#7a1010', '#cc2222', '#ff4444', '#ffaaaa']));
+        .interpolator(d3.interpolateRgbBasis(['#0d0000', '#7a1010', '#cc2222', '#ff4444', '#ffaaaa']));
     }
     const sel = d3.selectAll('.has-data');
     const fillFn = (d) => {
@@ -294,7 +294,7 @@ function drawCatHeatmap() {
   }));
   const cs = d3.scaleSequential()
     .domain([0, d3.quantile(pcts.sort(d3.ascending), 0.95) || 1])
-    .interpolator(d3.interpolateRgbBasis(['#5c0a0a', '#7a1010', '#cc2222', '#ff4444', '#ffaaaa']));
+    .interpolator(d3.interpolateRgbBasis(['#0d0000', '#7a1010', '#cc2222', '#ff4444', '#ffaaaa']));
 
   // Country headers (flags)
   svg.selectAll('.hm-ch').data(countries).join('text')

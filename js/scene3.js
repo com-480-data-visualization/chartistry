@@ -310,7 +310,7 @@ function drawTimingHeatmap(heatmapData, bestDay, bestHour) {
 
   const maxVal = d3.max(heatmapData, e => e.avg_views) || 1;
 
-  const redScale = d3.interpolateRgbBasis(['#5c0a0a', '#7a1010', '#cc2222', '#ff4444', '#ffaaaa']);
+  const redScale = d3.interpolateRgbBasis(['#0d0000', '#7a1010', '#cc2222', '#ff4444', '#ffaaaa']);
   const colorScale = d3.scaleSequential([0, maxVal], redScale);
 
   const containerW = el.clientWidth || 560;
