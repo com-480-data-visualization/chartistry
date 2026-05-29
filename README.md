@@ -26,4 +26,8 @@ python3 -m http.server 8080
 ```
 Open [http://localhost:8080](http://localhost:8080) in your web browser.
 
-[Milestone 1](milestone1/) • [Milestone 2](milestone2/) • [Milestone 3](milestone3/)
+[Milestone 1](milestone1/) • [Milestone 2](milestone2/)
+
+### Dataset
+
+This project is based on the [YouTube Trending Video Statistics](https://www.kaggle.com/datasets/datasnaek/youtube-new) dataset by Mitchell J, available on Kaggle.
